@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSIR-NET Mathematical Sciences — Full-Length Mock Tests</title>
   <link rel="stylesheet" href="style.css">
+  <!-- MathJax Configuration and Script -->
   <script>
     window.MathJax = {
       tex: {
@@ -40,7 +41,7 @@
     </div>
 
     <div class="mock-grid" id="mock-grid">
-      <!-- 5 Mock Cards Injected by JavaScript -->
+      <!-- 5 Mock Cards injected by script.js -->
     </div>
   </main>
 
@@ -97,7 +98,7 @@
         <ul>
           <li><strong>Attempt Limit Enforcement:</strong> You can attempt at most 15 questions in Part A, 25 in Part B, and 20 in Part C (Maximum 60 overall). You cannot answer a new question in a full section unless you clear or change an existing attempt.</li>
           <li><strong>Part C MSQ:</strong> Part C questions may have <em>one, two, three, or all four</em> options correct. Full credit (+4.0) is awarded only if all correct choices and zero incorrect choices are selected.</li>
-          <li><strong>Navigation & Auto-Save:</strong> Your answers, review flags, and elapsed timer are persisted in your browser via <code>localStorage</code>. Accidental reload will not lose your session.</li>
+          <li><strong>Navigation &amp; Auto-Save:</strong> Your answers, review flags, and elapsed timer are persisted in your browser via <code>localStorage</code>. Accidental reload will not lose your session.</li>
         </ul>
       </div>
 
@@ -146,11 +147,11 @@
         </div>
 
         <div class="question-body" id="q-content">
-          <!-- MathJax equation rendered here -->
+          <!-- Question text & equations rendered here -->
         </div>
 
         <div class="options-container" id="q-options">
-          <!-- Options dynamically rendered here -->
+          <!-- Options injected here -->
         </div>
 
         <div class="question-actions">
@@ -186,7 +187,7 @@
         </div>
 
         <div class="palette-grid" id="palette-buttons-grid">
-          <!-- Buttons generated dynamically -->
+          <!-- 130 Palette buttons injected here -->
         </div>
       </aside>
     </div>
@@ -223,7 +224,7 @@
         </div>
       </div>
 
-      <!-- Section-wise Table -->
+      <!-- Section-wise Breakdown Table -->
       <h3 class="section-title">SECTION-WISE BREAKDOWN</h3>
       <div class="table-responsive">
         <table class="res-table">
@@ -238,22 +239,26 @@
               <th>Score</th>
             </tr>
           </thead>
-          <tbody id="res-table-body"></tbody>
+          <tbody id="res-table-body">
+            <!-- Results injected here -->
+          </tbody>
         </table>
       </div>
 
-      <!-- Actions -->
+      <!-- Action Buttons with PDF Download -->
       <div class="action-row-center margin-top-lg">
         <button class="btn btn-secondary" id="btn-res-dashboard">Return to Dashboard</button>
         <button class="btn btn-outline" id="btn-res-retake">Retake Test</button>
-        <button class="btn btn-primary" id="btn-scroll-review">Review All Questions</button>
-        <button class="btn btn-success" id="btn-download-pdf">📥 Download as PDF</button>
+        <button class="btn btn-primary" id="btn-scroll-review">Review All 130 Questions</button>
+        <button class="btn btn-success" id="btn-download-pdf">&#128196; Download as PDF</button>
       </div>
 
       <!-- Detailed Question Solutions Review Section -->
       <section class="detailed-review-section" id="detailed-review-area">
         <h3 class="section-title">COMPREHENSIVE QUESTION REVIEW &amp; DETAILED EXPLANATIONS</h3>
-        <div id="review-list-container"></div>
+        <div id="review-list-container">
+          <!-- Injected via script -->
+        </div>
       </section>
     </div>
   </section>
