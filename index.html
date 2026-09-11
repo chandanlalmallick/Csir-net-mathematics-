@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSIR-NET Mathematical Sciences — Full-Length Mock Tests</title>
   <link rel="stylesheet" href="style.css">
-  <!-- MathJax for rendering LaTeX mathematical equations -->
   <script>
     window.MathJax = {
       tex: {
@@ -41,7 +40,7 @@
     </div>
 
     <div class="mock-grid" id="mock-grid">
-      <!-- 5 Mock Cards injected by script.js -->
+      <!-- 5 Mock Cards Injected by JavaScript -->
     </div>
   </main>
 
@@ -147,11 +146,11 @@
         </div>
 
         <div class="question-body" id="q-content">
-          <!-- LaTeX / Question text rendered here -->
+          <!-- MathJax equation rendered here -->
         </div>
 
         <div class="options-container" id="q-options">
-          <!-- Radio or Checkbox options injected here -->
+          <!-- Options dynamically rendered here -->
         </div>
 
         <div class="question-actions">
@@ -187,7 +186,7 @@
         </div>
 
         <div class="palette-grid" id="palette-buttons-grid">
-          <!-- 130 Palette buttons generated here -->
+          <!-- Buttons generated dynamically -->
         </div>
       </aside>
     </div>
@@ -222,10 +221,6 @@
           <span class="stat-num" id="res-accuracy">0%</span>
           <span class="stat-lbl">Accuracy</span>
         </div>
-        <div class="res-stat-card">
-          <span class="stat-num" id="res-time-used">0m</span>
-          <span class="stat-lbl">Time Taken</span>
-        </div>
       </div>
 
       <!-- Section-wise Table -->
@@ -243,30 +238,22 @@
               <th>Score</th>
             </tr>
           </thead>
-          <tbody id="res-table-body">
-            <!-- Populated via script -->
-          </tbody>
+          <tbody id="res-table-body"></tbody>
         </table>
       </div>
 
-      <!-- Topic Performance Analysis -->
-      <h3 class="section-title">TOPICAL PERFORMANCE &amp; DIAGNOSTICS</h3>
-      <div class="topic-insights-grid" id="topic-diagnostics">
-        <!-- Injected via script -->
-      </div>
-
+      <!-- Actions -->
       <div class="action-row-center margin-top-lg">
         <button class="btn btn-secondary" id="btn-res-dashboard">Return to Dashboard</button>
         <button class="btn btn-outline" id="btn-res-retake">Retake Test</button>
-        <button class="btn btn-primary" id="btn-scroll-review">Review All 130 Questions</button>
+        <button class="btn btn-primary" id="btn-scroll-review">Review All Questions</button>
+        <button class="btn btn-success" id="btn-download-pdf">📥 Download as PDF</button>
       </div>
 
       <!-- Detailed Question Solutions Review Section -->
       <section class="detailed-review-section" id="detailed-review-area">
         <h3 class="section-title">COMPREHENSIVE QUESTION REVIEW &amp; DETAILED EXPLANATIONS</h3>
-        <div id="review-list-container">
-          <!-- Injected via script -->
-        </div>
+        <div id="review-list-container"></div>
       </section>
     </div>
   </section>
@@ -292,4 +279,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
