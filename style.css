@@ -1,4 +1,3 @@
-/* --- RESET & COLOR PALETTE --- */
 :root {
   --primary: #1e3a8a;
   --primary-hover: #172554;
@@ -42,7 +41,7 @@ body {
   display: none !important;
 }
 
-/* --- HEADER --- */
+/* HEADER */
 .app-header {
   background-color: #0f172a;
   color: #ffffff;
@@ -96,7 +95,7 @@ body {
   color: #38bdf8;
 }
 
-/* --- LAYOUTS & CARDS --- */
+/* LAYOUTS & CARDS */
 .view-container {
   max-width: 1280px;
   width: 100%;
@@ -113,7 +112,6 @@ body {
   padding: 24px;
 }
 
-/* --- HERO & DASHBOARD --- */
 .hero-section {
   text-align: center;
   margin-bottom: 30px;
@@ -167,7 +165,7 @@ body {
   line-height: 1.6;
 }
 
-/* --- BUTTONS --- */
+/* BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -192,9 +190,10 @@ body {
 .btn-danger-outline { background: transparent; border-color: var(--danger); color: var(--danger); }
 .btn-danger-outline:hover { background: var(--danger-light); }
 .btn-large { padding: 12px 28px; font-size: 1rem; }
-.action-row-center { display: flex; justify-content: center; gap: 16px; margin-top: 24px; }
+.action-row-center { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 24px; }
+.margin-top-lg { margin-top: 32px; }
 
-/* --- INSTRUCTIONS VIEW --- */
+/* INSTRUCTIONS VIEW */
 .instruction-meta {
   display: flex;
   flex-wrap: wrap;
@@ -242,7 +241,7 @@ th {
   margin-bottom: 8px;
 }
 
-/* --- EXAM VIEW --- */
+/* EXAM VIEW */
 .exam-status-bar {
   background: #fff;
   border: 1px solid var(--border-color);
@@ -288,7 +287,6 @@ th {
   align-items: start;
 }
 
-/* Question panel */
 .question-meta-header {
   display: flex;
   justify-content: space-between;
@@ -379,7 +377,7 @@ th {
   gap: 8px;
 }
 
-/* Palette panel */
+/* PALETTE PANEL */
 .palette-panel {
   max-height: calc(100vh - 140px);
   overflow-y: auto;
@@ -465,14 +463,13 @@ th {
   outline-offset: 1px;
 }
 
-/* Pal States */
 .swatch.not-visited, .pal-btn.not-visited { background: #f1f5f9; color: #475569; }
 .swatch.unanswered, .pal-btn.unanswered { background: var(--danger-light); color: var(--danger); border-color: var(--danger); }
 .swatch.answered, .pal-btn.answered { background: var(--success); color: #fff; border-color: var(--success); }
 .swatch.review, .pal-btn.review { background: var(--review-purple); color: #fff; border-color: var(--review-purple); }
 .swatch.answered-review, .pal-btn.answered-review { background: var(--warning); color: #fff; border-color: var(--warning); }
 
-/* --- MODAL --- */
+/* MODAL */
 .modal-backdrop {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -519,7 +516,7 @@ th {
   gap: 10px;
 }
 
-/* --- RESULT VIEW --- */
+/* RESULTS & REVIEW */
 .result-header {
   text-align: center;
   margin-bottom: 24px;
@@ -558,53 +555,6 @@ th {
   border-bottom: 2px solid var(--border-color);
 }
 
-.topic-insights-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
-}
-
-.topic-diag-card {
-  border: 1px solid var(--border-color);
-  padding: 14px;
-  border-radius: 6px;
-  background: #ffffff;
-}
-
-.diag-title {
-  font-weight: 700;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  font-size: 0.88rem;
-}
-
-.diag-bar-track {
-  height: 8px;
-  background: #e2e8f0;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-
-.diag-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-}
-
-.diag-status-badge {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.status-strong { background: var(--success-light); color: var(--success); }
-.status-moderate { background: var(--warning-light); color: var(--warning); }
-.status-revise { background: var(--danger-light); color: var(--danger); }
-
-/* Review items */
 .detailed-review-section {
   margin-top: 36px;
 }
@@ -643,7 +593,7 @@ th {
   font-size: 0.9rem;
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* MOBILE MEDIA QUERIES */
 @media (max-width: 900px) {
   .exam-workspace {
     grid-template-columns: 1fr;
@@ -668,9 +618,7 @@ th {
 }
 
 @media (max-width: 600px) {
-  .app-header {
-    padding: 10px 14px;
-  }
+  .app-header { padding: 10px 14px; }
   .exam-badge { display: none; }
   .header-brand h1 { font-size: 0.95rem; }
   .timer-display { font-size: 1.1rem; }
@@ -681,3 +629,30 @@ th {
   .action-group-right .btn { flex: 1; }
 }
 
+/* PRINT / DOWNLOAD AS PDF STYLES */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .app-header,
+  .action-row-center,
+  .mobile-palette-toggle,
+  #submit-modal,
+  .palette-panel {
+    display: none !important;
+  }
+  .view-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .card, .review-item-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px !important;
+  }
+  .detailed-review-section {
+    display: block !important;
+  }
+}
