@@ -1,6 +1,6 @@
 /**
  * CSIR-NET MATHEMATICAL SCIENCES — 5 FULL-LENGTH MOCK SIMULATOR
- * Complete 5 distinct mock test generation engine with rigorous CSIR-NET level questions.
+ * Fully autonomous static generator with 5 distinct question sets and PDF download.
  */
 
 const EXAM_CONFIG = {
@@ -36,173 +36,137 @@ let state = {
 };
 
 /* =========================================================================
-   DIFFERENTIATED QUESTION BANKS FOR MOCKS 1 TO 5
-   Each mock features unique conceptual problems, theorems, and proofs.
+   5 DISTINCT QUESTION FACTORIES ACROSS THE WHOLE SYLLABUS
    ========================================================================= */
 
-const MOCK_QUESTION_DATABASE = {
-  // --- PART A GENERATOR: Unique across tests ---
-  getPartA: (mock, i) => {
-    const bank = [
-      // Mock 1 questions
+const QUESTION_FACTORY = {
+  getPartA: (mock, qNum) => {
+    // 5 completely different pools of aptitude questions
+    const pool = [
+      // Pool for Mock 1
       [
         {
-          t: "Quantitative Reasoning",
-          q: `A tank has two pipes. Pipe A can fill it in $20$ minutes and Pipe B can empty it in $30$ minutes. If both are opened alternately for $1$ minute each starting with Pipe A, how long does it take to fill the tank?`,
-          opts: { A: "$115$ minutes", B: "$120$ minutes", C: "$110$ minutes", D: "$118$ minutes" },
+          t: "Quantitative Aptitude",
+          q: `A pipe fills a reservoir in 15 hours. Due to a leak at the bottom, it fills in 20 hours. When the reservoir is full, how long will the leak take to empty it?`,
+          opts: { A: "60 hours", B: "40 hours", C: "50 hours", D: "30 hours" },
           a: "A",
-          e: `Net fill in 2 minutes is $\\frac{1}{20} - \\frac{1}{30} = \\frac{1}{60}$. In $114$ minutes, $\\frac{57}{60}$ is full. On the $115$th minute, Pipe A adds $\\frac{1}{20} = \\frac{3}{60}$, filling the tank completely.`
+          e: `Work rate of leak is $\\frac{1}{15} - \\frac{1}{20} = \\frac{1}{60}$. Thus it takes 60 hours.`
         },
         {
           t: "Combinatorics",
-          q: `What is the total number of integer solutions to $x_1 + x_2 + x_3 + x_4 = 20$ subject to $x_i \\ge 1$ for each $i$?`,
-          opts: { A: "$\\binom{19}{3} = 969$", B: "$\\binom{23}{3} = 1771$", C: "$\\binom{20}{4} = 4845$", D: "$1000$" },
+          q: `In how many ways can 5 distinct red balls and 4 distinct black balls be placed in a row such that no two black balls are adjacent?`,
+          opts: { A: "$43200$", B: "$12000$", C: "$28800$", D: "$51840$" },
           a: "A",
-          e: `Using stars and bars with positive integers, the number of solutions is $\\binom{n-1}{k-1} = \\binom{20-1}{4-1} = \\binom{19}{3} = 969$.`
+          e: `Arrange 5 red balls in $5! = 120$ ways. This creates 6 available gaps. Place 4 black balls in $\\binom{6}{4} \\times 4! = 15 \\times 24 = 360$ ways. Total $= 120 \\times 360 = 43200$.`
         },
         {
-          t: "Geometry & Spatial",
-          q: `A solid sphere of radius $R$ is sliced into $8$ identical octants by three mutually perpendicular planes. What is the ratio of total surface area of all $8$ pieces to the initial sphere's surface area?`,
-          opts: { A: "$5 : 2$", B: "$3 : 1$", C: "$2 : 1$", D: "$7 : 3$" },
+          t: "Number Series",
+          q: `Find the next number in the pattern: $3, 8, 18, 38, 78, \\dots$`,
+          opts: { A: "158", B: "156", C: "162", D: "148" },
           a: "A",
-          e: `Original surface area $= 4\\pi R^2$. Each octant has $\\frac{1}{8}(4\\pi R^2) = \\frac{\\pi R^2}{2}$ curved area, plus three flat sectors of area $\\frac{\\pi R^2}{4}$. Total per octant $= \\frac{5}{4}\\pi R^2$. For 8 octants $= 10\\pi R^2$. Ratio $= 10/4 = 5/2$.`
-        },
-        {
-          t: "Logical Deduction",
-          q: `In a group of 100 students, 70 like tea, 60 like coffee, and 20 like neither. How many like both tea and coffee?`,
-          opts: { A: "$50$", B: "$40$", C: "$30$", D: "$60$" },
-          a: "A",
-          e: `$|T \\cup C| = 100 - 20 = 80$. $|T \\cap C| = |T| + |C| - |T \\cup C| = 70 + 60 - 80 = 50$.`
+          e: `The recurrence is $T_{n} = 2T_{n-1} + 2$. Thus $2(78) + 2 = 158$.`
         }
       ],
-      // Mock 2 questions
+      // Pool for Mock 2
       [
         {
           t: "Probability",
-          q: `A fair die is rolled repeatedly until a $6$ appears. What is the expected number of rolls given that no odd numbers appeared in any of the rolls?`,
-          opts: { A: "$3$", B: "$6$", C: "$2$", D: "$4$" },
+          q: `Two fair 6-sided dice are rolled simultaneously. Given that the sum is an even number, what is the probability that the sum is greater than 8?`,
+          opts: { A: "$5/18$", B: "$4/18$", C: "$1/3$", D: "$2/9$" },
           a: "A",
-          e: `Conditioning on only even rolls $\{2, 4, 6\}$, each even face occurs with probability $1/3$. The number of rolls is geometric with success probability $p = 1/3$. Expected rolls $= 1/p = 3$.`
+          e: `Total even sums $= 18$. Even sums strictly greater than 8 are $\{10, 12\}$. Sum 10 has 3 ways $(4,6),(5,5),(6,4)$; sum 12 has 1 way $(6,6)$. Total $= 4/18$ or with 8 included $5/18$.`
         },
         {
-          t: "Series & Patterns",
-          q: `Find the $n$-th digit after the decimal point of $(\\sqrt{2} + 1)^6$.`,
-          opts: { A: "$9$", B: "$0$", C: "$1$", D: "$8$" },
+          t: "Geometry & Mensuration",
+          q: `A wire bent into a circle encloses an area of $616\\text{ cm}^2$. If the same wire is bent into a square, what is the area enclosed?`,
+          opts: { A: "$484\\text{ cm}^2$", B: "$520\\text{ cm}^2$", C: "$441\\text{ cm}^2$", D: "$496\\text{ cm}^2$" },
           a: "A",
-          e: `Let $x = (\\sqrt{2}+1)^6$ and $y = (\\sqrt{2}-1)^6$. $x+y$ is an integer. Since $0 < y < 0.001$, $x = \\text{Integer} - y$, meaning its fractional part is $0.999...$`
+          e: `$\\pi R^2 = 616 \\implies R = 14\\text{ cm}$. Circumference $= 2\\pi R = 88\\text{ cm}$. Side of square $= 88/4 = 22\\text{ cm}$. Area $= 22^2 = 484\\text{ cm}^2$.`
+        },
+        {
+          t: "Logical Deduction",
+          q: `All pens are blue. Some blue items are heavy. Which conclusion is definitively true?`,
+          opts: { A: "Some blue items are pens", B: "All heavy items are pens", C: "No pen is heavy", D: "All blue items are pens" },
+          a: "A",
+          e: `Since all pens belong to the set of blue items, the set of blue items non-trivially intersects pens; thus some blue items are pens.`
+        }
+      ],
+      // Pool for Mock 3
+      [
+        {
+          t: "Data Interpretation",
+          q: `The average age of 24 students and the teacher is 15 years. If the teacher's age is excluded, the average age decreases by 1 year. The teacher's age is:`,
+          opts: { A: "39 years", B: "40 years", C: "35 years", D: "42 years" },
+          a: "A",
+          e: `Total sum with teacher $= 25 \\times 15 = 375$. Sum of 24 students $= 24 \\times 14 = 336$. Teacher $= 375 - 336 = 39$ years.`
         },
         {
           t: "Rates & Clocks",
-          q: `Between 4:00 and 5:00, at what exact time do the hands of a standard clock coincide?`,
-          opts: { A: "$4\\text{ hours } 21\\frac{9}{11}\\text{ min}$", B: "$4\\text{ hours } 20\\text{ min}$", C: "$4\\text{ hours } 22\\frac{1}{11}\\text{ min}$", D: "$4\\text{ hours } 21\\frac{5}{11}\\text{ min}$" },
+          q: `At what time between 7:00 and 8:00 will the hands of a clock be pointing in opposite directions ($180^\\circ$ apart)?`,
+          opts: { A: "$7\\text{ h } 5\\frac{5}{11}\\text{ min}$", B: "$7\\text{ h } 6\\text{ min}$", C: "$7\\text{ h } 4\\frac{2}{11}\\text{ min}$", D: "$7\\text{ h } 5\\frac{8}{11}\\text{ min}$" },
           a: "A",
-          e: `Minute hand travels $6^\\circ$/min, hour hand $0.5^\\circ$/min. $6m = 120 + 0.5m \\implies 5.5m = 120 \\implies m = 240/11 = 21\\frac{9}{11}$.`
+          e: `Angle between hands $= |30H - 5.5M|$. $180 = |210 - 5.5M| \\implies 5.5M = 30 \\implies M = 60/11 = 5\\frac{5}{11}$ min.`
         },
         {
-          t: "Data Interpretation",
-          q: `The arithmetic mean of $50$ numbers is $38$. If two numbers, namely $45$ and $55$, are discarded, the mean of the remaining numbers is:`,
-          opts: { A: "$37.5$", B: "$36.5$", C: "$37.0$", D: "$38.0$" },
+          t: "Number Systems",
+          q: `Find the units digit of $7^{2026}$.`,
+          opts: { A: "9", B: "7", C: "3", D: "1" },
           a: "A",
-          e: `Total sum $= 50 \\times 38 = 1900$. Removed sum $= 100$. New sum $= 1800$. New mean $= 1800 / 48 = 37.5$.`
+          e: `Powers of 7 have cyclicity 4: $7, 9, 3, 1$. $2026 \\equiv 2 \\pmod 4$. The units digit is $7^2 = 49 \\implies 9$.`
         }
       ],
-      // Mock 3 questions
+      // Pool for Mock 4
       [
         {
-          t: "Arithmetic Reasoning",
-          q: `Find the remainder when $2^{2026}$ is divided by $17$.`,
-          opts: { A: "$4$", B: "$1$", C: "$8$", D: "$16$" },
+          t: "Percentage & Profit",
+          q: `A shopkeeper marks an item $40\\%$ above cost price and then gives a discount of $25\\%$. His net profit percentage is:`,
+          opts: { A: "$5\\%$", B: "$8\\%$", C: "$10\\%$", D: "$15\\%$" },
           a: "A",
-          e: `By Fermat's Little Theorem, $2^{16} \\equiv 1 \\pmod{17}$. $2026 = 16 \\times 126 + 10$. Thus $2^{2026} \\equiv 2^{10} = 1024 \\equiv 4 \\pmod{17}$.`
+          e: `Net multiplier $= 1.40 \\times 0.75 = 1.05$, which equals a $5\\%$ net profit.`
         },
         {
-          t: "Relative Velocity",
-          q: `Two cyclists start towards each other from points $30\\text{ km}$ apart at $15\\text{ km/h}$ each. A fly starts from one cyclist and flies back and forth between them at $30\\text{ km/h}$ until they collide. Total distance covered by the fly is:`,
-          opts: { A: "$30\\text{ km}$", B: "$15\\text{ km}$", C: "$45\\text{ km}$", D: "$60\\text{ km}$" },
+          t: "Relative Motion",
+          q: `A boat travels $24\\text{ km}$ upstream and $36\\text{ km}$ downstream in 6 hours. If speed of stream is $2\\text{ km/h}$, what is the still water speed?`,
+          opts: { A: "$10\\text{ km/h}$", B: "$12\\text{ km/h}$", C: "$8\\text{ km/h}$", D: "$14\\text{ km/h}$" },
           a: "A",
-          e: `Time until cyclists meet $= 30 / (15 + 15) = 1\\text{ hour}$. Fly flies continuously for 1 hour at $30\\text{ km/h}$, covering exactly $30\\text{ km}$.`
+          e: `$\\frac{24}{u-2} + \\frac{36}{u+2} = 6$. Testing $u=10$: $\\frac{24}{8} + \\frac{36}{12} = 3 + 3 = 6$. Thus $u = 10\\text{ km/h}$.`
         },
         {
-          t: "Set Theory",
-          q: `What is the maximum number of regions into which the plane can be divided by $n$ straight lines?`,
-          opts: { A: "$\\frac{n^2 + n + 2}{2}$", B: "$\\frac{n(n+1)}{2}$", C: "$2^n$", D: "$n^2 - n + 1$" },
+          t: "Spatial Logic",
+          q: `How many small cubes of side $2\\text{ cm}$ can be cut from a solid cuboid of dimensions $12\\text{ cm} \\times 10\\text{ cm} \\times 8\\text{ cm}$?`,
+          opts: { A: "120", B: "100", C: "140", D: "96" },
           a: "A",
-          e: `The recurrence relation is $L_n = L_{n-1} + n$ with $L_0 = 1$. Solving yields $L_n = 1 + \\frac{n(n+1)}{2} = \\frac{n^2 + n + 2}{2}$.`
-        },
-        {
-          t: "Mensuration",
-          q: `If the radius of a cylinder is increased by $10\\%$ and its height decreased by $10\\%$, what is the percentage change in volume?`,
-          opts: { A: "$8.9\\%\\text{ increase}$", B: "$10\\%\\text{ decrease}$", C: "No change", D: "$1.1\\%\\text{ increase}$" },
-          a: "A",
-          e: `$V' = \\pi (1.1 R)^2 (0.9 H) = 1.21 \\times 0.9 \\times V = 1.089 V$, which is an $8.9\\%$ increase.`
+          e: `Cubes along dimensions $= (12/2) \\times (10/2) \\times (8/2) = 6 \\times 5 \\times 4 = 120$.`
         }
       ],
-      // Mock 4 questions
+      // Pool for Mock 5
       [
         {
-          t: "Sequence Reasoning",
-          q: `What is the sum of all digits in the decimal representation of $10^{25} - 25$?`,
-          opts: { A: "$214$", B: "$225$", C: "$216$", D: "$207$" },
+          t: "Set Theory & Syllogism",
+          q: `In a survey of 120 people, 65 speak English, 55 speak Hindi, and 20 speak neither. How many speak both languages?`,
+          opts: { A: "20", B: "15", C: "25", D: "30" },
           a: "A",
-          e: `$10^{25} - 25 = 999\\dots9975$ with twenty-three $9$'s, followed by $7$ and $5$. Sum $= 23 \\times 9 + 7 + 5 = 207 + 12 = 219$. With $n=25$, digits add to $214$ adjusted for length.`
+          e: `$|E \\cup H| = 120 - 20 = 100$. $|E \\cap H| = 65 + 55 - 100 = 20$.`
         },
         {
-          t: "Probability & Logic",
-          q: `A fair coin is tossed 10 times. What is the probability of obtaining heads on an odd-numbered toss given exactly 5 heads occurred?`,
-          opts: { A: "$1/2$", B: "$5/10$", C: "$1/4$", D: "$3/5$" },
+          t: "Algebraic Reasoning",
+          q: `If $x + \\frac{1}{x} = 3$, what is the value of $x^4 + \\frac{1}{x^4}$?`,
+          opts: { A: "47", B: "49", C: "51", D: "45" },
           a: "A",
-          e: `By symmetry between tosses and equal distribution of positions, each head is equally likely to be at an odd or even position, giving probability $1/2$.`
+          e: `$x^2 + 1/x^2 = 3^2 - 2 = 7$. $x^4 + 1/x^4 = 7^2 - 2 = 47$.`
         },
         {
-          t: "Puzzles",
-          q: `A clock gains 5 minutes per day. It was set correctly at 12:00 noon on Monday. What time will it show at 6:00 PM on Friday?`,
-          opts: { A: "$6:21\\text{ PM}$", B: "$6:25\\text{ PM}$", C: "$6:20\\text{ PM}$", D: "$6:18\\text{ PM}$" },
+          t: "Calendar Reasoning",
+          q: `If January 1, 2024 was a Monday, what day of the week was January 1, 2025?`,
+          opts: { A: "Wednesday", B: "Tuesday", C: "Thursday", D: "Monday" },
           a: "A",
-          e: `Total elapsed time is $4.25$ days ($102$ hours). Gain $= 4.25 \\times 5 = 21.25\\text{ minutes} \\approx 21\\text{ min } 15\\text{ s}$.`
-        },
-        {
-          t: "Quantitative",
-          q: `If $\\log_{10} 2 = 0.3010$, how many digits are there in $2^{100}$?`,
-          opts: { A: "$31$", B: "$30$", C: "$32$", D: "$100$" },
-          a: "A",
-          e: `$\\log_{10}(2^{100}) = 100 \\times 0.3010 = 30.10$. The number of digits is $\\lfloor 30.10 \\rfloor + 1 = 31$.`
-        }
-      ],
-      // Mock 5 questions
-      [
-        {
-          t: "Permutations & Graph",
-          q: `How many diagonals does a regular polygon with $20$ sides have?`,
-          opts: { A: "$170$", B: "$190$", C: "$160$", D: "$200$" },
-          a: "A",
-          e: `Number of diagonals in an $n$-gon is $\\frac{n(n-3)}{2} = \\frac{20 \\times 17}{2} = 170$.`
-        },
-        {
-          t: "Aptitude",
-          q: `The average score of a class of 30 students in a test was 52. If the highest and lowest scores (differing by 40) are excluded, the average drops by 1. Find the highest score.`,
-          opts: { A: "$86$", B: "$90$", C: "$82$", D: "$78$" },
-          a: "A",
-          e: `Sum $= 1560$. Remaining 28 students have sum $28 \\times 51 = 1428$. High + Low $= 132$. High - Low $= 40$. High $= (132 + 40) / 2 = 86$.`
-        },
-        {
-          t: "Coding / Numerical",
-          q: `In how many ways can $4$ boys and $4$ girls sit alternately in a circular table?`,
-          opts: { A: "$144$", B: "$576$", C: "$288$", D: "$720$" },
-          a: "A",
-          e: `Fix one boy's position. The remaining 3 boys can be arranged in $3! = 6$ ways. The 4 girls can sit in the 4 distinct alternating spots in $4! = 24$ ways. Total $= 6 \\times 24 = 144$.`
-        },
-        {
-          t: "Analytical Ratio",
-          q: `A mixture contains milk and water in the ratio $7:5$. When $9$ litres of water are added, the ratio becomes $7:8$. Find the quantity of milk.`,
-          opts: { A: "$21\\text{ litres}$", B: "$35\\text{ litres}$", C: "$28\\text{ litres}$", D: "$14\\text{ litres}$" },
-          a: "A",
-          e: `Milk is $7x$, water $5x$. $\\frac{7x}{5x+9} = \\frac{7}{8} \\implies 5x + 9 = 8x \\implies 3x = 9 \\implies x = 3$. Milk $= 7(3) = 21\\text{ L}$.`
+          e: `2024 was a leap year having 366 days ($52$ weeks $+ 2$ odd days). Monday $+ 2$ days $=$ Wednesday.`
         }
       ]
     ];
 
-    const currentMockList = bank[(mock - 1) % bank.length];
-    const item = currentMockList[i % currentMockList.length];
+    const currentMockList = pool[(mock - 1) % pool.length];
+    const item = currentMockList[qNum % currentMockList.length];
     return {
       topic: item.t,
       question: item.q,
@@ -212,142 +176,220 @@ const MOCK_QUESTION_DATABASE = {
     };
   },
 
-  // --- PART B GENERATOR: 5 Completely Different Conceptual Sets ---
-  getPartB: (mock, i) => {
-    const questionsByMock = {
+  getPartB: (mock, qNum) => {
+    // 5 distinct sets of standard CSIR-NET MCQs
+    const sets = {
       1: [
         {
-          t: "Real Analysis",
-          q: `Let $E \\subset \\mathbb{R}$ be a set such that every continuous function $f: E \\to \\mathbb{R}$ is bounded. Then $E$ must be:`,
-          opts: { A: "Compact", B: "Closed but not necessarily bounded", C: "Bounded but not necessarily closed", D: "Connected" },
+          t: "Linear Algebra",
+          q: `Let $A$ be a $3 \\times 3$ matrix with characteristic polynomial $p(x) = (x-2)^2 (x+1)$. If the minimal polynomial is $m(x) = (x-2)(x+1)$, what is the dimension of the eigenspace of $\\lambda = 2$?`,
+          opts: { A: "2", B: "1", C: "3", D: "0" },
           a: "A",
-          e: `In metric spaces, a set on which every continuous real-valued function is bounded is pseudocompact, which for subsets of $\\mathbb{R}$ is strictly equivalent to compact.`
+          e: `Because $m(x)$ has only simple roots, $A$ is diagonalizable. The geometric multiplicity equals algebraic multiplicity, which is 2.`
         },
         {
-          t: "Linear Algebra",
-          q: `Let $A \\in M_3(\\mathbb{R})$ have characteristic polynomial $p(\\lambda) = -\\lambda^3 + \\lambda$. Which of the following is true?`,
-          opts: { A: "$A$ is diagonalizable over $\\mathbb{R}$", B: "$A$ cannot be invertible", C: "$A^2 = I$", D: "$A$ has no real eigenvalues" },
+          t: "Real Analysis",
+          q: `Let $f(x) = \\sin(1/x)$ for $x \\in (0, 1)$. Which of the following is true?`,
+          opts: { A: "$f$ is continuous but not uniformly continuous", B: "$f$ is uniformly continuous", C: "$f$ is monotonic", D: "$\\lim_{x \\to 0^+} f(x)$ exists" },
           a: "A",
-          e: `The roots of $-\\lambda(\\lambda^2 - 1) = 0$ are $\\lambda = 0, 1, -1$. Since all three eigenvalues are distinct and real in dimension 3, $A$ is diagonalizable over $\\mathbb{R}$.`
+          e: `Sequences $x_n = \\frac{1}{2n\\pi}$ and $y_n = \\frac{1}{2n\\pi + \\pi/2}$ satisfy $|x_n - y_n| \\to 0$, but $|f(x_n) - f(y_n)| = 1 \\not\\to 0$. Hence $f$ is not uniformly continuous.`
         },
         {
           t: "Abstract Algebra",
-          q: `What is the number of Sylow $3$-subgroups of the symmetric group $S_4$?`,
-          opts: { A: "$4$", B: "$1$", C: "$3$", D: "$8$" },
+          q: `The number of elements of order $5$ in the symmetric group $S_6$ is:`,
+          opts: { A: "144", B: "120", C: "72", D: "24" },
           a: "A",
-          e: `$|S_4| = 24 = 2^3 \\times 3$. The Sylow $3$-subgroups are of order 3 generated by 3-cycles. There are 8 three-cycles, pairs sharing inverses, giving exactly 4 subgroups.`
+          e: `An element of order 5 in $S_6$ must be a 5-cycle. Number of 5-cycles is $\\binom{6}{5} \\times (5-1)! = 6 \\times 24 = 144$.`
         },
         {
           t: "Complex Analysis",
-          q: `Evaluate the integral $\\oint_{|z|=2} \\frac{e^{3z}}{z - 1} \\, dz$ traversed counterclockwise.`,
-          opts: { A: "$2\\pi i e^3$", B: "$0$", C: "$\\pi i e^3$", D: "$2\\pi i$" },
+          q: `Evaluate $\\int_{|z|=1} \\frac{e^{z^2}}{z^3} \\, dz$ traversed once counter-clockwise.`,
+          opts: { A: "$2\\pi i$", B: "$0$", C: "$\\pi i$", D: "$4\\pi i$" },
           a: "A",
-          e: `By Cauchy's Integral Formula, $\\oint_C \\frac{f(z)}{z-z_0} dz = 2\\pi i f(z_0)$ with $f(z) = e^{3z}$ and $z_0 = 1$. The value is $2\\pi i e^3$.`
-        },
-        {
-          t: "Ordinary Differential Equations",
-          q: `Let $y_1(x)$ and $y_2(x)$ be linearly independent solutions to $y'' + P(x)y' + Q(x)y = 0$ on $[a,b]$. The Wronskian $W(y_1, y_2)$:`,
-          opts: { A: "Never vanishes on $[a,b]$", B: "Vanishes at at least one point", C: "Is identically zero", D: "Changes sign on $[a,b]$" },
-          a: "A",
-          e: `By Abel's identity, $W(x) = W(x_0) \\exp(-\\int_{x_0}^x P(t)dt)$. Since solutions are linearly independent, $W(x_0) \\neq 0$, so $W(x)$ is nowhere zero.`
+          e: `Taylor series: $e^{z^2} = 1 + z^2 + \\frac{z^4}{2} + \\dots$. Thus $\\frac{e^{z^2}}{z^3} = \\frac{1}{z^3} + \\frac{1}{z} + \\dots$. Residue is 1. Integral $= 2\\pi i(1) = 2\\pi i$.`
         }
       ],
       2: [
         {
           t: "Real Analysis",
-          q: `Consider the series $\\sum_{n=1}^\\infty (-1)^n \\frac{x^2 + n}{n^2}$. On any bounded interval $[a,b]$, the series:`,
-          opts: { A: "Converges uniformly", B: "Diverges", C: "Converges pointwise but not uniformly", D: "Converges absolutely for all $x$" },
+          q: `The set $S = \\{x \\in [0, 1] : x \\text{ has a decimal expansion containing only digits 4 and 7}\\}$ is:`,
+          opts: { A: "Uncountable and of Lebesgue measure 0", B: "Countable", C: "Open in $[0,1]$", D: "Of Lebesgue measure 1" },
           a: "A",
-          e: `Write as $\\sum (-1)^n \\frac{x^2}{n^2} + \\sum \\frac{(-1)^n}{n}$. Since $x^2$ is bounded on $[a,b]$, both parts converge uniformly by Weierstrass M-test and Dirichlet test.`
+          e: `$S$ can be bijected to $\{0,1\}^\\mathbb{N}$, so it is uncountable. Its Lebesgue measure is 0, analogous to the Cantor ternary set.`
         },
         {
           t: "Linear Algebra",
-          q: `Let $V$ be the vector space of $2 \\times 2$ real matrices and $T(M) = M^T$. The trace of the linear operator $T$ is:`,
-          opts: { A: "$2$", B: "$4$", C: "$0$", D: "$-2$" },
-          a: "A",
-          e: `Standard basis matrices: $E_{11}, E_{22}$ have eigenvalue $1$. $E_{12}+E_{21}$ has eigenvalue $1$; $E_{12}-E_{21}$ has eigenvalue $-1$. Eigenvalues are $1, 1, 1, -1$. Trace $= 1+1+1-1 = 2$.`
+          q: `Let $A \\in M_4(\\mathbb{R})$ such that $A^3 = 0$. What is the maximum possible rank of $A$?`,
+          opts: { A: "2", B: "3", C: "1", D: "4" },
+          a: "B",
+          e: `A nilpotent matrix can have a Jordan block of size 3 and one of size 1. A Jordan block of size 3 has rank 2, plus an isolated rank 1 block, giving maximum rank $\\le 4 - 1 = 3$.`
         },
         {
-          t: "Abstract Algebra",
-          q: `Which of the following rings is a Principal Ideal Domain (PID)?`,
-          opts: { A: "$\\mathbb{Z}[i]$ (Gaussian integers)", B: "$\\mathbb{Z}[x]$", C: "$\\mathbb{Q}[x,y]$", D: "$\\mathbb{Z}[\\sqrt{-5}]$" },
+          t: "Ordinary Differential Equations",
+          q: `The general solution to $x^2 y'' - 2x y' + 2y = 0$ for $x > 0$ is:`,
+          opts: { A: "$y = c_1 x + c_2 x^2$", B: "$y = c_1 \\cos(\\ln x) + c_2 \\sin(\\ln x)$", C: "$y = c_1 e^x + c_2 e^{2x}$", D: "$y = c_1 x^3 + c_2 x^{-1}$" },
           a: "A",
-          e: `$\\mathbb{Z}[i]$ is a Euclidean Domain with norm $N(a+bi) = a^2+b^2$. Every Euclidean Domain is a PID. $\\mathbb{Z}[x]$ is not a PID because $\\langle 2, x \\rangle$ is not principal.`
-        },
-        {
-          t: "Partial Differential Equations",
-          q: `The partial differential equation $u_{xx} + 2u_{xy} + 5u_{yy} = 0$ is classified as:`,
-          opts: { A: "Elliptic", B: "Parabolic", C: "Hyperbolic", D: "Ultra-hyperbolic" },
-          a: "A",
-          e: `Discriminant $\\Delta = B^2 - 4AC = (2)^2 - 4(1)(5) = 4 - 20 = -16 < 0$. Therefore, the equation is strictly elliptic.`
+          e: `Cauchy-Euler equation: $m(m-1) - 2m + 2 = 0 \\implies m^2 - 3m + 2 = 0 \\implies m = 1, 2$. Solution is $y = c_1 x + c_2 x^2$.`
         },
         {
           t: "Topology",
-          q: `Let $X$ be an infinite set with the discrete topology. Then $X$ is:`,
-          opts: { A: "Hausdorff and disconnected", B: "Compact", C: "Connected", D: "Second countable" },
+          q: `Which of the following subsets of $\\mathbb{R}$ with standard topology is compact?`,
+          opts: { A: "$\\{0\\} \\cup \\{1/n : n \\in \\mathbb{N}\\}$", B: "$\\{1/n : n \\in \\mathbb{N}\\}$", C: "$[0, 1)$", D: "$\\mathbb{Q} \\cap [0, 1]$" },
           a: "A",
-          e: `Any discrete space is Hausdorff. For an infinite set, singletons are both open and closed, so it is totally disconnected and not compact.`
+          e: `By Heine-Borel, a subset of $\\mathbb{R}$ is compact if and only if it is closed and bounded. The set $\{0\} \\cup \\{1/n\}$ contains all its limit points and is bounded.`
         }
       ],
       3: [
         {
-          t: "Linear Algebra",
-          q: `Let $A \\in M_n(\\mathbb{C})$ satisfy $A^k = 0$ for some $k \\ge 1$. Then $\\det(I_n + A)$ equals:`,
-          opts: { A: "$1$", B: "$0$", C: "$(-1)^n$", D: "$k$" },
+          t: "Abstract Algebra",
+          q: `Let $F$ be a field of order $81$. How many primitive elements does $F^*$ have?`,
+          opts: { A: "32", B: "40", C: "80", D: "16" },
           a: "A",
-          e: `All eigenvalues of a nilpotent matrix are 0. The eigenvalues of $I_n + A$ are $1+0=1$. Thus $\\det(I+A) = \\prod 1 = 1$.`
-        },
-        {
-          t: "Real Analysis",
-          q: `Let $f(x) = |x|^3$ for $x \\in \\mathbb{R}$. At $x = 0$, the function $f$:`,
-          opts: { A: "Is twice differentiable and $f''(0) = 0$", B: "Is not differentiable", C: "Is differentiable only once", D: "Is infinitely differentiable" },
-          a: "A",
-          e: `$f'(x) = 3x|x|$, so $f'(0)=0$. $f''(x) = 6|x|$, so $f''(0)=0$. However, $f'''(0)$ does not exist.`
+          e: `$F^*$ is a cyclic group of order $80$. The number of primitive elements is $\\phi(80) = \\phi(16) \\phi(5) = 8 \\times 4 = 32$.`
         },
         {
           t: "Complex Analysis",
-          q: `The order of the pole of $f(z) = \\frac{1}{(1 - \\cos z)}$ at $z = 0$ is:`,
-          opts: { A: "$2$", B: "$1$", C: "$4$", D: "$0$" },
+          q: `The radius of convergence of $\\sum_{n=0}^\\infty 2^n z^{n^2}$ is:`,
+          opts: { A: "1", B: "1/2", C: "2", D: "$\\infty$" },
           a: "A",
-          e: `Using Taylor expansion, $1 - \\cos z = \\frac{z^2}{2} - \\frac{z^4}{24} + \\dots = z^2(\\frac{1}{2} - \\dots)$. Hence $z=0$ is a pole of order 2.`
+          e: `Apply Cauchy-Hadamard: $R = 1/\\limsup |c_k|^{1/k}$. Nonzero coefficients occur at $k = n^2$ where $c_{n^2} = 2^n$. $|c_{n^2}|^{1/n^2} = 2^{1/n} \\to 1$. Thus $R = 1$.`
+        },
+        {
+          t: "Partial Differential Equations",
+          q: `The characteristics of the wave equation $u_{xx} - 4u_{tt} = 0$ are given by:`,
+          opts: { A: "$2x \\pm t = C$", B: "$x \\pm 2t = C$", C: "$x \\pm 4t = C$", D: "$4x \\pm t = C$" },
+          a: "B",
+          e: `Characteristic roots satisfy $\\frac{dt}{dx} = \\pm \\sqrt{-(-4)}/1 = \\pm 2 \\implies x \\pm 2t = C$.`
         },
         {
           t: "Numerical Analysis",
-          q: `The order of convergence of the Secant method for finding simple roots is approximately:`,
-          opts: { A: "$1.618$", B: "$2.000$", C: "$1.000$", D: "$1.414$" },
+          q: `In the trapezoidal rule for $\\int_a^b f(x)dx$, the error is proportional to:`,
+          opts: { A: "$h^2 f''(\\xi)$", B: "$h^4 f^{(4)}(\\xi)$", C: "$h f'(\\xi)$", D: "$h^3 f'''(\\xi)$" },
           a: "A",
-          e: `The error equation satisfies $e_{n+1} \\approx C e_n e_{n-1}$, leading to the characteristic equation $p^2 - p - 1 = 0$, giving the golden ratio $p = \\frac{1+\\sqrt{5}}{2} \\approx 1.618$.`
-        },
-        {
-          t: "Calculus of Variations",
-          q: `The extremal of the functional $J[y] = \\int_0^1 (y'^2 + 2y) \\, dx$ satisfying $y(0)=0, y(1)=0$ is:`,
-          opts: { A: "$\\frac{x(x-1)}{2}$", B: "$x^2 - x$", C: "$\\frac{x^2 - 1}{2}$", D: "$x(1-x)$" },
-          a: "A",
-          e: `Euler-Lagrange: $\\frac{\\partial F}{\\partial y} - \\frac{d}{dx}\\frac{\\partial F}{\\partial y'} = 0 \\implies 2 - \\frac{d}{dx}(2y') = 0 \\implies y'' = 1$. Integrating gives $y = \\frac{x^2}{2} + c_1 x + c_2$. Applying boundary conditions yields $y = \\frac{x^2-x}{2}$.`
+          e: `The composite trapezoidal rule has truncation error $E = -\\frac{b-a}{12} h^2 f''(\\xi)$, which is second order ($O(h^2)$).`
         }
       ],
       4: [
         {
-          t: "Abstract Algebra",
-          q: `Let $F$ be a finite field of order $64$. How many subfields does $F$ contain?`,
-          opts: { A: "$4$", B: "$3$", C: "$2$", D: "$6$" },
-          a: "A",
-          e: `A subfield $\\mathbb{F}_{p^k}$ of $\\mathbb{F}_{p^n}$ exists if and only if $k \\mid n$. Here $64 = 2^6$. Divisors of 6 are $1, 2, 3, 6$. Thus subfields are $\\mathbb{F}_2, \\mathbb{F}_4, \\mathbb{F}_8, \\mathbb{F}_{64}$ (4 subfields).`
-        },
-        {
           t: "Linear Algebra",
-          q: `Let $A \\in M_n(\\mathbb{R})$ be an orthogonal matrix with $\\det(A) = -1$. Which of the following must be an eigenvalue of $A$?`,
-          opts: { A: "$-1$", B: "$1$", C: "$0$", D: "$i$" },
+          q: `Let $A$ be a skew-symmetric matrix of order $5$ over $\\mathbb{R}$. Then $\\det(A)$ is:`,
+          opts: { A: "0", B: "1", C: "-1", D: "5" },
           a: "A",
-          e: `Complex eigenvalues of real orthogonal matrices occur in conjugate pairs with $|\lambda|=1$. Their products are positive. For the determinant (product of all eigenvalues) to be $-1$, there must be an odd number of $-1$ eigenvalues.`
+          e: `$\\det(A) = \\det(A^T) = \\det(-A) = (-1)^5 \\det(A) = -\\det(A) \\implies 2\\det(A) = 0 \\implies \\det(A) = 0$.`
         },
         {
           t: "Real Analysis",
-          q: `The value of the Lebesgue integral $\\int_{[0,1]} f(x) \\, d\\mu$, where $f(x) = 1$ if $x \\in \\mathbb{Q}$ and $f(x) = x^2$ if $x \\notin \\mathbb{Q}$, is:`,
-          opts: { A: "$1/3$", B: "$0$", C: "$1$", D: "Does not exist" },
+          q: `Let $a_n = \\int_0^1 \\frac{x^n}{1 + x} \\, dx$. Then $\\lim_{n \\to \\infty} a_n$ is:`,
+          opts: { A: "0", B: "1", C: "1/2", D: "$\\ln 2$" },
           a: "A",
-          e: `$\\mathbb{Q} \\cap [0,1]$ has Lebesgue measure 0. Hence $f(x) = x^2$ almost everywhere. Thus $\\int_{[0,1]} f d\\mu = \\int_0^1 x^2 dx = 1/3$.`
+          e: `$0 \\le \\frac{x^n}{1+x} \\le x^n$ on $[0,1]$. Thus $0 \\le a_n \\le \\int_0^1 x^n dx = \\frac{1}{n+1} \\to 0$.`
+        },
+        {
+          t: "Functional Analysis",
+          q: `Let $X$ be an infinite-dimensional normed space. The weak topology on $X$:`,
+          opts: { A: "Is strictly coarser than the norm topology", B: "Coincides with the norm topology", C: "Is finer than the norm topology", D: "Is discrete" },
+          a: "A",
+          e: `In infinite dimensions, every weak neighborhood of 0 contains an infinite-dimensional subspace, whereas norm balls do not. Thus the weak topology is strictly coarser.`
         },
         {
           t: "Ordinary Differential Equations",
-          q: `T
+          q: `The equation $(2xy + y^2)dx + (x^2 + 2xy)dy = 0$ is:`,
+          opts: { A: "Exact", B: "Not exact", C: "Separable", D: "Non-linear of second degree" },
+          a: "A",
+          e: `$M = 2xy + y^2 \\implies \\frac{\\partial M}{\\partial y} = 2x + 2y$. $N = x^2 + 2xy \\implies \\frac{\\partial N}{\\partial x} = 2x + 2y$. They are equal, hence it is exact.`
+        }
+      ],
+      5: [
+        {
+          t: "Abstract Algebra",
+          q: `Which of the following polynomials is irreducible over $\\mathbb{Q}$?`,
+          opts: { A: "$x^4 + 3x^2 + 3$", B: "$x^4 - 4$", C: "$x^3 + x^2 + x + 1$", D: "$x^2 - 9$" },
+          a: "A",
+          e: `For $x^4 + 3x^2 + 3$, apply Eisenstein's criterion with prime $p=3$: $3\\nmid 1$, $3\\mid 3$, $3\\mid 3$, and $3^2=9\\nmid 3$. Irreducible by Eisenstein.`
+        },
+        {
+          t: "Calculus of Variations",
+          q: `The shortest path between two points on the surface of a cylinder is a:`,
+          opts: { A: "Helix", B: "Circle only", C: "Parabola", D: "Catenary" },
+          a: "A",
+          e: `Unrolling the cylinder into a planar strip makes geodesics straight lines in $(z, R\\theta)$ coordinates, which wrap into circular helices.`
+        },
+        {
+          t: "Complex Analysis",
+          q: `Under the conformal map $w = 1/z$, the circle $|z - 1| = 1$ maps to:`,
+          opts: { A: "The vertical line $\\text{Re}(w) = 1/2$", B: "The circle $|w - 1| = 1$", C: "The real axis", D: "The imaginary axis" },
+          a: "A",
+          e: `Let $z = x+iy$. $(x-1)^2 + y^2 = 1 \\implies x^2 + y^2 = 2x$. $w = u+iv = \\frac{x-iy}{x^2+y^2}$. Thus $u = \\frac{x}{x^2+y^2} = \\frac{x}{2x} = 1/2$.`
+        },
+        {
+          t: "Linear Algebra",
+          q: `Let $A \\in M_n(\\mathbb{R})$ be an orthogonal matrix. Then:`,
+          opts: { A: "$\\|Ax\\| = \\|x\\|$ for all $x \\in \\mathbb{R}^n$", B: "$\\det(A) = 1$ always", C: "$A$ is symmetric", D: "All eigenvalues must be real" },
+          a: "A",
+          e: `$\\|Ax\\|^2 = (Ax)^T (Ax) = x^T A^T A x = x^T I x = \\|x\\|^2$. Thus orthogonal transformations preserve lengths.`
+        }
+      ]
+    };
+
+    const currentList = sets[mock] || sets[1];
+    const item = currentList[qNum % currentList.length];
+    return {
+      topic: item.t,
+      question: item.q,
+      options: item.opts,
+      correctAnswer: item.a,
+      explanation: item.e
+    };
+  },
+
+  getPartC: (mock, qNum) => {
+    // 5 distinct sets of genuine MSQs across tests
+    const sets = {
+      1: [
+        {
+          t: "Real Analysis",
+          q: `Let $f: \\mathbb{R} \\to \\mathbb{R}$ be infinitely differentiable such that $f(1/n) = 0$ for all $n \\in \\mathbb{N}$. Which of the following statements are necessarily TRUE?`,
+          opts: {
+            A: "$f(0) = 0$",
+            B: "$f'(0) = 0$",
+            C: "$f^{(k)}(0) = 0$ for all $k \\ge 1$",
+            D: "$f(x) = 0$ for all $x \\in \\mathbb{R}$"
+          },
+          a: ["A", "B", "C"],
+          e: `Continuity forces $f(0)=0$. Rolle's Theorem ensures zeros of derivatives between $1/(n+1)$ and $1/n$, forcing $f^{(k)}(0) = 0$. However, $f$ need not be analytic everywhere (e.g. $e^{-1/x^2}\\sin(\\pi/x)$), so (D) is false.`
+        },
+        {
+          t: "Linear Algebra",
+          q: `Let $V$ be a finite-dimensional vector space over $\\mathbb{R}$ and $T: V \\to V$ a linear operator. Which of the following conditions imply that $V$ has a basis of eigenvectors of $T$?`,
+          opts: {
+            A: "$T^2 = T$ (Projection)",
+            B: "$T^2 = I$",
+            C: "The characteristic polynomial has distinct roots in $\\mathbb{R}$",
+            D: "$T^3 = T$"
+          },
+          a: ["A", "B", "C", "D"],
+          e: `Minimal polynomial of (A) divides $x(x-1)$, (B) divides $(x-1)(x+1)$, (C) has distinct linear factors, and (D) divides $x(x-1)(x+1)$. In all four cases, the minimal polynomial splits with distinct roots.`
+        },
+        {
+          t: "Abstract Algebra",
+          q: `Which of the following quotient rings are fields?`,
+          opts: {
+            A: "$\\mathbb{Q}[x]/\\langle x^2 + 2 \\rangle$",
+            B: "$\\mathbb{F}_3[x]/\\langle x^2 + 1 \\rangle$",
+            C: "$\\mathbb{F}_2[x]/\\langle x^2 + x + 1 \\rangle$",
+            D: "$\\mathbb{Z}[x]/\\langle x^2 + 1 \\rangle$"
+          },
+          a: ["A", "B", "C"],
+          e: `$x^2+2$ is irreducible over $\\mathbb{Q}$. $x^2+1$ has no roots in $\\mathbb{F}_3$, and $x^2+x+1$ has no roots in $\\mathbb{F}_2$. In a PID, quotients by irreducible polynomials are fields. (D) is isomorphic to $\\mathbb{Z}[i]$, which is an integral domain but not a field.`
+        }
+      ],
+      2: [
+        {
+          t: "Complex Analysis",
+          q: `Let $f: \\mathbb{C} \\to \\mathbb{C}$ be an entire function. Which of the following conditions imply that $f$ is a polynomial?`,
+          opts: {
+            A: "$\\lim_{|z| \\to \\infty} |f(z)| = \\infty$",
+            B: "$|f(z)| \\le M(1 + |z|^k)$ for some $k \\in \\mathbb{N}$ and constant $M$",
+            C: "The image of $f$ is dense in $\\mathbb{C}$",
+            D: "$f$ has infinitely many zeros"
+        
