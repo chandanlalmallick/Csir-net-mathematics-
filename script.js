@@ -1,11 +1,9 @@
 /**
  * CSIR-NET MATHEMATICAL SCIENCES — 5 FULL-LENGTH MOCK SIMULATOR
- * Fully static, zero-backend, GitHub Pages compatible.
  */
 
-// Centralized CSIR-NET Exam Configuration
 const EXAM_CONFIG = {
-  durationSeconds: 180 * 60, // 180 minutes
+  durationSeconds: 180 * 60,
   totalQuestions: 130,
   maxAttempts: 60,
   rules: {
@@ -15,7 +13,6 @@ const EXAM_CONFIG = {
   }
 };
 
-// Storage Keys
 const STORAGE_KEYS = {
   ACTIVE_MOCK: "csir_active_mock",
   ANSWERS: "csir_answers",
@@ -23,15 +20,13 @@ const STORAGE_KEYS = {
   VISITED: "csir_visited",
   CURRENT_Q: "csir_current_q",
   TIME_LEFT: "csir_remaining_time",
-  IS_STARTED: "csir_test_started",
-  RESULT: "csir_last_result"
+  IS_STARTED: "csir_test_started"
 };
 
-// State Store
 let state = {
   selectedMock: 1,
   currentQuestionIndex: 0,
-  answers: {}, // { qIndex: "A" } or { qIndex: ["A", "C"] }
+  answers: {},
   marked: new Set(),
   visited: new Set(),
   remainingSeconds: EXAM_CONFIG.durationSeconds,
@@ -39,290 +34,169 @@ let state = {
   activePaletteTab: "A"
 };
 
-/* =========================================================================
-   COMPREHENSIVE QUESTION DATA GENERATOR (MOCKS 1 - 5)
-   Produces precisely 130 authentic CSIR-NET questions per test (Total: 650)
-   spanning all core syllabus topics with rigorous mathematics and LaTeX.
-   ========================================================================= */
-
 const CSIR_BANK_BLUEPRINT = {
   partA: [
     {
       topic: "Quantitative Aptitude",
-      q: (n) => `A train running at a speed of $72\\text{ km/h}$ crosses a platform of length ${200 + n * 20}\\text{ m}$ in ${25 + n}\\text{ seconds}$. What is the length of the train?`,
+      q: (n) => `A train running at $72\\text{ km/h}$ passes a platform of length ${200 + n * 10}\\text{ m}$ in ${25 + (n % 5)}\\text{ s}$. Find the length of the train.`,
       opts: (n) => ({
         A: `${300 + n * 5}\\text{ m}`,
-        B: `${300 + n * 5 - 20}\\text{ m}`,
-        C: `${300 + n * 5 + 20}\\text{ m}`,
-        D: `${280 + n * 5}\\text{ m}`
+        B: `${280 + n * 5}\\text{ m}`,
+        C: `${320 + n * 5}\\text{ m}`,
+        D: `${260 + n * 5}\\text{ m}`
       }),
       ans: "A",
-      exp: (n) => `Speed $= 72\\times\\frac{5}{18}=20\\text{ m/s}$. Total distance $= 20\\times (${25 + n}) = ${500 + 20 * n}\\text{ m}$. Train length $= (${500 + 20 * n}) - (${200 + 20 * n}) = ${300 + n * 5}\\text{ m}$.`
+      exp: (n) => `Speed $= 72 \\times \\frac{5}{18} = 20\\text{ m/s}$. Distance $= 20 \\times (${25 + (n % 5)})$. Train length $= \\text{Distance} - (${200 + n * 10})$.`
     },
     {
-      topic: "Probability & Combinatorics",
-      q: (n) => `A box contains $5$ red, $4$ blue, and ${3 + n}$ green balls. Three balls are drawn at random without replacement. What is the probability that all three balls are of different colours?`,
-      opts: (n) => {
-        const total = 12 + n;
-        const combTotal = (total * (total - 1) * (total - 2)) / 6;
-        const favorable = 5 * 4 * (3 + n);
-        return {
-          A: `$\\frac{${favorable}}{${combTotal}}$`,
-          B: `$\\frac{${favorable - 10}}{${combTotal}}$`,
-          C: `$\\frac{${favorable + 10}}{${combTotal}}$`,
-          D: `$\\frac{1}{${12 + n}}$`
-        };
-      },
+      topic: "Combinatorics & Probability",
+      q: (n) => `Three cards are drawn from a pack of $52$ cards. What is the probability that all three are aces?`,
+      opts: () => ({
+        A: `$\\frac{1}{5525}$`,
+        B: `$\\frac{3}{5525}$`,
+        C: `$\\frac{1}{221}$`,
+        D: `$\\frac{4}{5525}$`
+      }),
       ans: "A",
-      exp: (n) => `Total balls $= ${12 + n}$. Total ways to choose 3 balls is $\\binom{${12 + n}}{3}$. Favorable ways $= 5 \\times 4 \\times ${3 + n} = ${20 * (3 + n)}$. Hence probability is $\\frac{${20 * (3 + n)}}{\\binom{${12 + n}}{3}}$.`
+      exp: () => `Probability $= \\frac{\\binom{4}{3}}{\\binom{52}{3}} = \\frac{4}{22100} = \\frac{1}{5525}$.`
     },
     {
-      topic: "Logical Reasoning & Series",
-      q: (n) => `Find the next number in the sequence: $2, ${5 + n}, ${10 + 2 * n}, ${17 + 3 * n}, ${26 + 4 * n}, \\dots$`,
+      topic: "Logical Reasoning",
+      q: (n) => `Find the next number in the sequence: $2, ${5 + n}, ${10 + 2 * n}, ${17 + 3 * n}, \\dots$`,
       opts: (n) => ({
-        A: `${37 + 5 * n}`,
-        B: `${35 + 5 * n}`,
-        C: `${38 + 5 * n}`,
-        D: `${36 + 4 * n}`
+        A: `${26 + 4 * n}`,
+        B: `${25 + 4 * n}`,
+        C: `${27 + 4 * n}`,
+        D: `${24 + 3 * n}`
       }),
       ans: "A",
-      exp: (n) => `The $k$-th term of the sequence follows the relation $T_k = k^2 + 1 + (k - 1)n$. For $k=6$, $T_6 = 6^2 + 1 + 5n = ${37 + 5 * n}$.`
-    },
-    {
-      topic: "Data & Percentages",
-      q: (n) => `If the price of a commodity increases by ${20 + n}\\%$, by what percentage must a household reduce its consumption so that the total expenditure remains unchanged?`,
-      opts: (n) => {
-        const p = 20 + n;
-        const red = ((100 * p) / (100 + p)).toFixed(2);
-        return {
-          A: `$${red}\\%$`,
-          B: `$${p}\\%$`,
-          C: `$${(p * 0.8).toFixed(2)}\\%$`,
-          D: `$${(100 - p).toFixed(2)}\\%$`
-        };
-      },
-      ans: "A",
-      exp: (n) => `Reduction percentage formula $= \\frac{r}{100 + r}\\times 100\\%$. Substituting $r = ${20 + n}$ yields $\\frac{${20 + n}}{${120 + n}} \\times 100\\%$.`
+      exp: (n) => `Formula is $T_k = k^2 + 1 + (k - 1)n$. For $k=5$, $T_5 = 26 + 4n$.`
     }
   ],
   partB: [
     {
       topic: "Linear Algebra",
-      q: (n) => `Let $A$ be an $n \\times n$ real matrix such that $A^2 = A$ and $\\text{rank}(A) = ${n + 2}$. Which of the following is true?`,
+      q: () => `Let $A$ be an $n \\times n$ real matrix such that $A^2 = A$. Which of the following statements is ALWAYS true?`,
       opts: () => ({
-        A: "The minimal polynomial of $A$ is divisible by $x^2$.",
-        B: "The only possible eigenvalues of $A$ are $0$ and $1$, and $A$ is diagonalizable over $\\mathbb{R}$.",
-        C: "$A$ must be invertible.",
-        D: "$\\text{trace}(A) = 0$."
+        A: "The only possible eigenvalues of $A$ are $0$ and $1$, and $A$ is diagonalizable.",
+        B: "$A$ must be an invertible matrix.",
+        C: "$\\text{trace}(A) = 0$.",
+        D: "The minimal polynomial of $A$ has degree $\\ge 3$."
       }),
-      ans: "B",
-      exp: () => "Since $A^2 - A = 0$, the minimal polynomial divides $x(x-1)$, which has distinct linear real roots. Thus $A$ is diagonalizable and eigenvalues are in $\{0, 1\}$."
+      ans: "A",
+      exp: () => `Since $A(A-I) = 0$, minimal polynomial divides $x(x-1)$, which has non-repeated linear roots.`
     },
     {
       topic: "Real Analysis",
-      q: (n) => `Let $f:[0,1] \\to \\mathbb{R}$ be continuous with $\\int_0^1 f(x)x^k \\, dx = 0$ for all $k = 0, 1, 2, \\dots$. Then:`,
+      q: () => `Let $f: [0,1] \\to \\mathbb{R}$ be continuous with $\\int_0^1 f(x) x^k \\, dx = 0$ for all $k \\ge 0$. Then:`,
       opts: () => ({
         A: "$f(x) = 0$ for all $x \\in [0,1]$.",
-        B: "$f(x) \\ge 0$ for all $x \\in [0,1]$ but $f \\not\\equiv 0$.",
-        C: "$f$ is unbounded on $(0,1)$.",
-        D: "$f(x) = \\sin(\\pi x)$."
+        B: "$f(x) \\ge 1$ for all $x$.",
+        C: "$f$ must be non-differentiable.",
+        D: "$f(x) = \\cos(\\pi x)$."
       }),
       ans: "A",
-      exp: () => "By the Weierstrass Approximation Theorem, polynomials are dense in $C[0,1]$. Thus $\\int_0^1 (f(x))^2 dx = 0$, which forces $f \\equiv 0$ on $[0,1]$."
+      exp: () => `By Weierstrass approximation theorem, polynomials are dense in $C[0,1]$. Hence $f \\equiv 0$.`
     },
     {
       topic: "Abstract Algebra",
-      q: (n) => `Let $G$ be a group of order ${[77, 65, 85, 33, 35][n % 5]}$. Which of the following is correct?`,
+      q: () => `Every group of order $35$ is:`,
       opts: () => ({
-        A: "$G$ must be cyclic.",
-        B: "$G$ is simple.",
-        C: "The center $Z(G)$ is trivial.",
-        D: "$G$ has no normal Sylow subgroups."
+        A: "Cyclic",
+        B: "Non-abelian",
+        C: "Simple",
+        D: "Infinite"
       }),
       ans: "A",
-      exp: (n) => {
-        const order = [77, 65, 85, 33, 35][n % 5];
-        return `Order $|G|=pq$ where $p < q$ and $p$ does not divide $q-1$. By Sylow's theorem and the $pq$-group classification, every group of order ${order} is cyclic.`;
-      }
+      exp: () => `Order is $35 = 5 \\times 7$. Since $5$ does not divide $(7 - 1)$, the group is unique and cyclic.`
     },
     {
       topic: "Complex Analysis",
-      q: (n) => `Let $f(z) = \\frac{e^z - 1}{z^${n + 2}}$. The residue of $f(z)$ at $z = 0$ is:`,
-      opts: (n) => {
-        const k = n + 1;
-        return {
-          A: `$\\frac{1}{${k}!}$`,
-          B: `$\\frac{1}{${k + 1}!}$`,
-          C: `$1$`,
-          D: `$0$`
-        };
-      },
+      q: () => `The residue of $f(z) = \\frac{e^z - 1}{z^2}$ at $z = 0$ is:`,
+      opts: () => ({
+        A: "$1$",
+        B: "$0$",
+        C: "$\\frac{1}{2}$",
+        D: "$-1$"
+      }),
       ans: "A",
-      exp: (n) => `Using Taylor expansion, $e^z - 1 = \\sum_{m=1}^\\infty \\frac{z^m}{m!}$. Thus $f(z) = \\sum_{m=1}^\\infty \\frac{z^{m - (${n + 2})}}{m!}$. The coefficient of $z^{-1}$ occurs when $m = ${n + 1}$, giving $\\frac{1}{(${n + 1})!}$.`
-    },
-    {
-      topic: "Ordinary Differential Equations",
-      q: (n) => `Consider the initial value problem $y' = y^{${(2 * n + 1) / (2 * n + 3)}}, \\; y(0) = 0$. On $[0, \\infty)$, the solution:`,
-      opts: () => ({
-        A: "Is unique on $[0, \\infty)$.",
-        B: "Admits infinitely many solutions.",
-        C: "Blows up in finite time.",
-        D: "Does not exist."
-      }),
-      ans: "B",
-      exp: () => "Since the exponent is in $(0, 1)$, the function $f(y) = y^\\alpha$ is not Lipschitz continuous at $y=0$. By Peano's theorem solutions exist, and branching gives infinitely many solutions."
-    },
-    {
-      topic: "Topology",
-      q: () => `Let $X = \\mathbb{R}$ equipped with the co-finite topology. Then $X$ is:`,
-      opts: () => ({
-        A: "Hausdorff and compact.",
-        B: "Compact but not Hausdorff.",
-        C: "Hausdorff but not compact.",
-        D: "Neither compact nor connected."
-      }),
-      ans: "B",
-      exp: () => "Any cofinite topology on an infinite set is compact (any non-empty open set has a finite complement) and $T_1$, but no two non-empty open sets are disjoint, so it is never Hausdorff ($T_2$)."
+      exp: () => `$\\frac{e^z - 1}{z^2} = \\frac{1}{z} + \\frac{1}{2!} + \\frac{z}{3!} + \\dots$. Residue is coefficient of $1/z$, which is $1$.`
     }
   ],
   partC: [
     {
       topic: "Real Analysis",
-      q: () => `Let $f_n(x) = \\frac{n x}{1 + n^2 x^2}$ for $x \\in [0,1]$. Which of the following statements are true?`,
+      q: () => `Let $f_n(x) = \\frac{nx}{1 + n^2 x^2}$ for $x \\in [0,1]$. Which of the following statements are true?`,
       opts: () => ({
-        A: "$f_n(x) \\to 0$ pointwise on $[0,1]$ as $n \\to \\infty$.",
-        B: "$f_n$ converges uniformly to $0$ on $[0,1]$.",
-        C: "$\\lim_{n \\to \\infty} \\int_0^1 f_n(x) \\, dx = 0$.",
+        A: "$f_n(x) \\to 0$ pointwise on $[0,1]$.",
+        B: "$f_n$ does NOT converge uniformly on $[0,1]$.",
+        C: "$\\lim_{n\\to\\infty}\\int_0^1 f_n(x)\\,dx = 0$.",
         D: "The sequence $(f_n)$ is uniformly bounded on $[0,1]$."
       }),
-      ans: ["A", "C", "D"],
-      exp: () => "For $x=0$, $f_n(0)=0$. For $x>0$, $f_n(x) \\approx \\frac{1}{nx} \\to 0$. Pointwise limit is $0$. $\\sup_{x \\in [0,1]} f_n(x) = f_n(1/n) = 1/2 \\not\\to 0$, so convergence is not uniform. However, $\\int_0^1 f_n dx = \\frac{1}{2n}\\ln(1+n^2) \\to 0$ and $|f_n(x)| \\le 1/2$, so (A), (C), and (D) are true."
+      ans: ["A", "B", "C", "D"],
+      exp: () => `Maximum value is $f_n(1/n) = 1/2$, preventing uniform convergence to 0, though pointwise limit and integral limit are 0.`
     },
     {
       topic: "Linear Algebra",
-      q: (n) => `Let $V$ be a finite-dimensional inner product space over $\\mathbb{C}$ and let $T: V \\to V$ be a linear operator satisfying $T^* = -T$ (skew-adjoint). Which of the following are ALWAYS true?`,
+      q: () => `Let $T: V \\to V$ be a skew-adjoint operator ($T^* = -T$) on a finite-dimensional complex inner product space. Which of the following are ALWAYS true?`,
       opts: () => ({
         A: "All eigenvalues of $T$ are purely imaginary or zero.",
-        B: "$T$ is diagonalizable with an orthonormal basis of eigenvectors.",
+        B: "$T$ is unitarily diagonalizable.",
         C: "$I + T$ is invertible.",
-        D: "$\\det(e^T) = 1$."
+        D: "$\\det(e^T) \\neq 0$."
       }),
       ans: ["A", "B", "C", "D"],
-      exp: () => "Every skew-adjoint operator is normal ($TT^* = T^*T = -T^2$), so it is unitarily diagonalizable. Its eigenvalues $\\lambda$ satisfy $\\bar{\\lambda} = -\\lambda \\implies \\text{Re}(\\lambda) = 0$. Since eigenvalues cannot be $-1$, $I+T$ is invertible. Finally, $\\det(e^T) = e^{\\text{trace}(T)}$, and the trace is purely imaginary, so $|\\det(e^T)| = 1$; specifically $\\det(e^T) = 1$ when unitary."
-    },
-    {
-      topic: "Abstract Algebra",
-      q: () => `Let $R = \\mathbb{Z}[x]$ be the polynomial ring in one variable over $\\mathbb{Z}$. Which of the following ideals are maximal?`,
-      opts: () => ({
-        A: "$\\langle x \\rangle$",
-        B: "$\\langle 2, x \\rangle$",
-        C: "$\\langle x^2 + 1 \\rangle$",
-        D: "$\\langle 3, x^2 + 1 \\rangle$"
-      }),
-      ans: ["B", "D"],
-      exp: () => "$R/\\langle x \\rangle \\cong \\mathbb{Z}$ (integral domain, not a field, so prime but not maximal). $R/\\langle 2, x \\rangle \\cong \\mathbb{Z}_2$ (a field, so maximal). $R/\\langle 3, x^2 + 1 \\rangle \\cong \\mathbb{F}_3[x]/\\langle x^2 + 1 \\rangle$, which is a field of 9 elements since $x^2+1$ is irreducible over $\\mathbb{Z}_3$. Hence B and D are maximal."
-    },
-    {
-      topic: "Complex Analysis",
-      q: () => `Let $f: \\mathbb{C} \\to \\mathbb{C}$ be an entire function. Which of the following conditions imply that $f$ is a constant function?`,
-      opts: () => ({
-        A: "$\\text{Re}(f(z)) \\le 0$ for all $z \\in \\mathbb{C}$.",
-        B: "$|f'(z)| \\le M |z|$ for all $z$ with $|z| \\ge 1$.",
-        C: "$f(1/n) = 0$ for all $n \\in \\mathbb{N}$.",
-        D: "The range of $f$ omits the open unit disk $\\mathbb{D} = \\{z \\in \\mathbb{C} : |z| < 1\\}$."
-      }),
-      ans: ["A", "C", "D"],
-      exp: () => "(A) $\\text{Re}(f) \\le 0 \\implies e^{f(z)}$ is bounded entire $\\implies f$ constant by Liouville. (B) implies $f$ is a polynomial of degree $\\le 2$, not necessarily constant. (C) has an accumulation point $0$ inside the domain of holomorphy, so $f \\equiv 0$ by the identity theorem. (D) By Picard's Little Theorem or Liouville ($1/(f(z) - w_0)$ is bounded for $w_0 \\in \\mathbb{D}$), $f$ must be constant."
-    },
-    {
-      topic: "Partial Differential Equations",
-      q: () => `Consider the PDE $\\frac{\\partial^2 u}{\\partial x^2} - 4 \\frac{\\partial^2 u}{\\partial x \\partial y} + 4 \\frac{\\partial^2 u}{\\partial y^2} = 0$. Which of the following statements are correct?`,
-      opts: () => ({
-        A: "The PDE is parabolic everywhere in $\\mathbb{R}^2$.",
-        B: "The characteristic curves are given by $2x + y = C$.",
-        C: "The general solution is of the form $u(x,y) = f(2x + y) + x \\, g(2x + y)$ for arbitrary smooth functions $f, g$.",
-        D: "The equation can be reduced to elliptic canonical form."
-      }),
-      ans: ["A", "B", "C"],
-      exp: () => "Here $A=1, B=-4, C=4$. The discriminant $\\Delta = B^2 - 4AC = 16 - 16 = 0$, so it is parabolic everywhere. The characteristic equation is $\\frac{dy}{dx} = \\frac{B}{2A} = -2 \\implies y + 2x = C$. The general solution for repeated characteristics is $f(2x+y) + x g(2x+y)$."
-    },
-    {
-      topic: "Functional Analysis",
-      q: () => `Let $X$ and $Y$ be Banach spaces and let $T: X \\to Y$ be a linear operator. Which of the following statements are true?`,
-      opts: () => ({
-        A: "If $T$ is bounded and bijective, then $T^{-1}$ is continuous.",
-        B: "If the graph of $T$ is closed in $X \\times Y$, then $T$ is bounded.",
-        C: "Every Hilbert space is reflexive.",
-        D: "The unit sphere $S = \\{x \\in X : \\|x\\| = 1\\}$ is compact in the norm topology if and only if $\\dim X < \\infty$."
-      }),
-      ans: ["A", "B", "C", "D"],
-      exp: () => "(A) Open Mapping Theorem. (B) Closed Graph Theorem. (C) Riesz Representation Theorem implies reflexivity of Hilbert spaces. (D) Riesz Lemma on compactness of unit balls."
-    },
-    {
-      topic: "Numerical Analysis",
-      q: () => `Consider the fixed-point iteration $x_{k+1} = g(x_k)$ where $g \\in C^1[a,b]$ with $g([a,b]) \\subseteq [a,b]$. Which of the following guarantee convergence to a unique fixed point $\\alpha \\in [a,b]$ for any initial point $x_0 \\in [a,b]$?`,
-      opts: () => ({
-        A: "$\\max_{x \\in [a,b]} |g'(x)| < 1$.",
-        B: "$g'(x) > 0$ for all $x \\in [a,b]$.",
-        C: "$g$ is a contraction mapping on $[a,b]$.",
-        D: "$|g(x) - g(y)| \\le L |x - y|$ for all $x,y \\in [a,b]$ with $L < 1$."
-      }),
-      ans: ["A", "C", "D"],
-      exp: () => "By Banach's Fixed-Point Theorem, a contraction mapping ($L < 1$) guarantees existence and uniqueness of the fixed point and convergence of iterates. By the Mean Value Theorem, $\\max |g'| < 1$ implies contraction. (B) alone does not bound $|g'|$ below 1."
+      exp: () => `Skew-adjoint operators are normal ($T^*T = TT^*$), so unitarily diagonalizable, with pure imaginary eigenvalues.`
     }
   ]
 };
 
-// Procedural synthesizer to guarantee exactly 130 unique questions per mock
 function generateMockQuestions(mockNumber) {
   const questions = [];
   const m = mockNumber;
 
-  // PART A: Exactly 20 questions
   for (let i = 1; i <= 20; i++) {
-    const template = CSIR_BANK_BLUEPRINT.partA[(i + m) % CSIR_BANK_BLUEPRINT.partA.length];
+    const t = CSIR_BANK_BLUEPRINT.partA[(i + m) % CSIR_BANK_BLUEPRINT.partA.length];
     questions.push({
-      id: `M${m}-A-${String(i).padStart(3, "0")}`,
+      id: `M${m}-A-${i}`,
       number: i,
       section: "A",
-      topic: template.topic,
-      difficulty: i <= 6 ? "Easy" : (i <= 16 ? "Moderate" : "Hard"),
-      question: template.q(i + m * 3),
-      options: template.opts(i + m * 3),
-      correctAnswer: template.ans,
-      explanation: template.exp(i + m * 3)
+      topic: t.topic,
+      difficulty: "Moderate",
+      question: t.q(i + m),
+      options: t.opts(i + m),
+      correctAnswer: t.ans,
+      explanation: t.exp(i + m)
     });
   }
 
-  // PART B: Exactly 40 questions (21 to 60)
   for (let i = 21; i <= 60; i++) {
-    const template = CSIR_BANK_BLUEPRINT.partB[(i + m) % CSIR_BANK_BLUEPRINT.partB.length];
+    const t = CSIR_BANK_BLUEPRINT.partB[(i + m) % CSIR_BANK_BLUEPRINT.partB.length];
     questions.push({
-      id: `M${m}-B-${String(i).padStart(3, "0")}`,
+      id: `M${m}-B-${i}`,
       number: i,
       section: "B",
-      topic: template.topic,
-      difficulty: i <= 30 ? "CSIR-NET Standard" : "Hard",
-      question: template.q(i + m * 2),
-      options: template.opts(i + m * 2),
-      correctAnswer: template.ans,
-      explanation: template.exp(i + m * 2)
+      topic: t.topic,
+      difficulty: "CSIR Standard",
+      question: t.q(i + m),
+      options: t.opts(i + m),
+      correctAnswer: t.ans,
+      explanation: t.exp(i + m)
     });
   }
 
-  // PART C: Exactly 70 questions (61 to 130) MSQ
   for (let i = 61; i <= 130; i++) {
-    const template = CSIR_BANK_BLUEPRINT.partC[(i + m) % CSIR_BANK_BLUEPRINT.partC.length];
+    const t = CSIR_BANK_BLUEPRINT.partC[(i + m) % CSIR_BANK_BLUEPRINT.partC.length];
     questions.push({
-      id: `M${m}-C-${String(i).padStart(3, "0")}`,
+      id: `M${m}-C-${i}`,
       number: i,
       section: "C",
-      topic: template.topic,
-      difficulty: i <= 100 ? "Hard" : "Very Hard",
-      question: template.q(i + m),
-      options: template.opts(i + m),
-      correctAnswer: template.ans,
-      explanation: template.exp(i + m)
+      topic: t.topic,
+      difficulty: "Hard (MSQ)",
+      question: t.q(i + m),
+      options: t.opts(i + m),
+      correctAnswer: t.ans,
+      explanation: t.exp(i + m)
     });
   }
 
@@ -331,18 +205,9 @@ function generateMockQuestions(mockNumber) {
 
 let activeQuestionBank = [];
 
-/* =========================================================================
-   CORE LOGIC & CONTROLLER
-   ========================================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  initDashboard();
-  setupEventListeners();
-  checkExistingSession();
-});
-
 function initDashboard() {
   const grid = document.getElementById("mock-grid");
+  if (!grid) return;
   grid.innerHTML = "";
   for (let i = 1; i <= 5; i++) {
     const card = document.createElement("div");
@@ -353,7 +218,6 @@ function initDashboard() {
         <div class="mock-meta">
           <p><strong>130 Questions</strong></p>
           <p>180 Minutes &bull; Max 60 Attempts</p>
-          <p>Full Syllabus Simulation</p>
         </div>
       </div>
       <button class="btn btn-primary" onclick="showInstructions(${i})">START TEST</button>
@@ -362,13 +226,14 @@ function initDashboard() {
   }
 }
 
-function showInstructions(mockIndex) {
+window.showInstructions = function(mockIndex) {
   state.selectedMock = mockIndex;
-  document.getElementById("inst-mock-title").innerText = `MOCK TEST ${mockIndex} — INSTRUCTIONS`;
+  const instTitle = document.getElementById("inst-mock-title");
+  if (instTitle) instTitle.innerText = `MOCK TEST ${mockIndex} — INSTRUCTIONS`;
   switchView("view-instructions");
-}
+};
 
-function startExam() {
+window.startExam = function() {
   activeQuestionBank = generateMockQuestions(state.selectedMock);
   state.currentQuestionIndex = 0;
   state.answers = {};
@@ -386,67 +251,335 @@ function startExam() {
   renderCurrentQuestion();
   updateStatusStrip();
   startTimer();
-}
+};
 
 function switchView(viewId) {
   ["view-dashboard", "view-instructions", "view-exam", "view-result"].forEach(id => {
-    document.getElementById(id).classList.add("hidden");
+    const el = document.getElementById(id);
+    if (el) el.classList.add("hidden");
   });
-  document.getElementById(viewId).classList.remove("hidden");
+  const target = document.getElementById(viewId);
+  if (target) target.classList.remove("hidden");
 
   const headerTimer = document.getElementById("header-timer-container");
-  if (viewId === "view-exam") {
-    headerTimer.classList.remove("hidden");
-  } else {
-    headerTimer.classList.add("hidden");
+  if (headerTimer) {
+    if (viewId === "view-exam") headerTimer.classList.remove("hidden");
+    else headerTimer.classList.add("hidden");
   }
 }
 
-/* --- ATTEMPT TRACKING & LIMITS --- */
-function getSectionAttemptCount(sectionCode) {
+function getSectionAttemptCount(sec) {
   let count = 0;
   activeQuestionBank.forEach((q, idx) => {
-    if (q.section === sectionCode && state.answers[idx] !== undefined) {
-      const ans = state.answers[idx];
-      if (Array.isArray(ans) ? ans.length > 0 : ans !== null) {
-        count++;
-      }
+    if (q.section === sec && state.answers[idx] !== undefined) {
+      const a = state.answers[idx];
+      if (Array.isArray(a) ? a.length > 0 : a !== null) count++;
     }
   });
   return count;
 }
 
 function updateStatusStrip() {
-  const countA = getSectionAttemptCount("A");
-  const countB = getSectionAttemptCount("B");
-  const countC = getSectionAttemptCount("C");
-  const total = countA + countB + countC;
+  const cA = getSectionAttemptCount("A");
+  const cB = getSectionAttemptCount("B");
+  const cC = getSectionAttemptCount("C");
+  const tot = cA + cB + cC;
 
-  document.getElementById("stat-part-a").innerText = `${countA} / ${EXAM_CONFIG.rules.A.maxAttempt}`;
-  document.getElementById("stat-part-b").innerText = `${countB} / ${EXAM_CONFIG.rules.B.maxAttempt}`;
-  document.getElementById("stat-part-c").innerText = `${countC} / ${EXAM_CONFIG.rules.C.maxAttempt}`;
-  document.getElementById("stat-total").innerText = `${total} / ${EXAM_CONFIG.maxAttempts}`;
+  const elA = document.getElementById("stat-part-a");
+  const elB = document.getElementById("stat-part-b");
+  const elC = document.getElementById("stat-part-c");
+  const elT = document.getElementById("stat-total");
+
+  if (elA) elA.innerText = `${cA} / ${EXAM_CONFIG.rules.A.maxAttempt}`;
+  if (elB) elB.innerText = `${cB} / ${EXAM_CONFIG.rules.B.maxAttempt}`;
+  if (elC) elC.innerText = `${cC} / ${EXAM_CONFIG.rules.C.maxAttempt}`;
+  if (elT) elT.innerText = `${tot} / ${EXAM_CONFIG.maxAttempts}`;
 }
 
-/* --- QUESTION RENDERING --- */
 function renderCurrentQuestion() {
   const q = activeQuestionBank[state.currentQuestionIndex];
+  if (!q) return;
   state.visited.add(state.currentQuestionIndex);
 
   document.getElementById("q-section-badge").innerText = `PART ${q.section}`;
   document.getElementById("q-header-number").innerText = `Question ${q.number} / ${EXAM_CONFIG.totalQuestions}`;
   document.getElementById("q-topic-tag").innerText = q.topic;
 
-  const marksRule = EXAM_CONFIG.rules[q.section];
-  document.getElementById("q-marks-tag").innerText = `+${marksRule.correct} / -${marksRule.negative}`;
-
+  const rule = EXAM_CONFIG.rules[q.section];
+  document.getElementById("q-marks-tag").innerText = `+${rule.correct} / -${rule.negative}`;
   document.getElementById("q-content").innerHTML = q.question;
 
-  const optionsContainer = document.getElementById("q-options");
-  optionsContainer.innerHTML = "";
+  const optCont = document.getElementById("q-options");
+  optCont.innerHTML = "";
 
-  const isMSQ = marksRule.isMSQ;
+  const isMSQ = rule.isMSQ;
   const userAns = state.answers[state.currentQuestionIndex];
 
-  ["A", "B", "C", "D"].forEach(optKey => {
- 
+  ["A", "B", "C", "D"].forEach(k => {
+    const label = document.createElement("label");
+    label.className = "option-item";
+
+    const input = document.createElement("input");
+    input.type = isMSQ ? "checkbox" : "radio";
+    input.name = "question_option";
+    input.value = k;
+
+    if (isMSQ) {
+      if (Array.isArray(userAns) && userAns.includes(k)) input.checked = true;
+    } else {
+      if (userAns === k) input.checked = true;
+    }
+
+    input.onchange = () => handleOptionSelection(k, isMSQ);
+
+    const txt = document.createElement("span");
+    txt.className = "option-label-text";
+    txt.innerHTML = `<strong>(${k})</strong> ${q.options[k]}`;
+
+    label.appendChild(input);
+    label.appendChild(txt);
+    optCont.appendChild(label);
+  });
+
+  updatePaletteButton(state.currentQuestionIndex);
+  updateStatusStrip();
+  saveExamState();
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise();
+  }
+}
+
+function handleOptionSelection(k, isMSQ) {
+  const q = activeQuestionBank[state.currentQuestionIndex];
+  const maxSec = EXAM_CONFIG.rules[q.section].maxAttempt;
+  const currentCount = getSectionAttemptCount(q.section);
+  const alreadyAnswered = state.answers[state.currentQuestionIndex] !== undefined;
+
+  if (!alreadyAnswered && currentCount >= maxSec) {
+    alert(`Attempt limit reached for Part ${q.section} (Max: ${maxSec})`);
+    renderCurrentQuestion();
+    return;
+  }
+
+  if (isMSQ) {
+    let arr = state.answers[state.currentQuestionIndex] || [];
+    if (!Array.isArray(arr)) arr = [];
+    if (arr.includes(k)) arr = arr.filter(x => x !== k);
+    else arr.push(k);
+
+    if (arr.length === 0) delete state.answers[state.currentQuestionIndex];
+    else state.answers[state.currentQuestionIndex] = arr;
+  } else {
+    state.answers[state.currentQuestionIndex] = k;
+  }
+
+  updatePaletteButton(state.currentQuestionIndex);
+  updateStatusStrip();
+  saveExamState();
+}
+
+function initPalette() {
+  const grid = document.getElementById("palette-buttons-grid");
+  if (!grid) return;
+  grid.innerHTML = "";
+
+  activeQuestionBank.forEach((q, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "pal-btn not-visited";
+    btn.id = `pal-btn-${idx}`;
+    btn.innerText = q.number;
+    btn.onclick = () => {
+      state.currentQuestionIndex = idx;
+      renderCurrentQuestion();
+    };
+    grid.appendChild(btn);
+  });
+  filterPaletteBySection(state.activePaletteTab);
+}
+
+function filterPaletteBySection(sec) {
+  state.activePaletteTab = sec;
+  document.querySelectorAll("#palette-section-tabs .tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-sec") === sec);
+  });
+
+  activeQuestionBank.forEach((q, idx) => {
+    const btn = document.getElementById(`pal-btn-${idx}`);
+    if (btn) btn.style.display = (q.section === sec) ? "flex" : "none";
+  });
+}
+
+function updatePaletteButton(idx) {
+  const btn = document.getElementById(`pal-btn-${idx}`);
+  if (!btn) return;
+
+  const isAns = state.answers[idx] !== undefined;
+  const isRev = state.marked.has(idx);
+  const isVis = state.visited.has(idx);
+
+  btn.className = "pal-btn";
+  if (idx === state.currentQuestionIndex) btn.classList.add("current");
+
+  if (isAns && isRev) btn.classList.add("answered-review");
+  else if (isAns) btn.classList.add("answered");
+  else if (isRev) btn.classList.add("review");
+  else if (isVis) btn.classList.add("unanswered");
+  else btn.classList.add("not-visited");
+}
+
+function startTimer() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  const display = document.getElementById("exam-timer");
+
+  state.timerInterval = setInterval(() => {
+    state.remainingSeconds--;
+    if (state.remainingSeconds <= 0) {
+      clearInterval(state.timerInterval);
+      submitExam();
+    }
+    const h = String(Math.floor(state.remainingSeconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((state.remainingSeconds % 3600) / 60)).padStart(2, "0");
+    const s = String(state.remainingSeconds % 60).padStart(2, "0");
+    if (display) display.innerText = `${h}:${m}:${s}`;
+    saveExamState();
+  }, 1000);
+}
+
+function saveExamState() {
+  localStorage.setItem(STORAGE_KEYS.CURRENT_Q, state.currentQuestionIndex);
+  localStorage.setItem(STORAGE_KEYS.TIME_LEFT, state.remainingSeconds);
+  localStorage.setItem(STORAGE_KEYS.ANSWERS, JSON.stringify(state.answers));
+  localStorage.setItem(STORAGE_KEYS.MARKED, JSON.stringify([...state.marked]));
+  localStorage.setItem(STORAGE_KEYS.VISITED, JSON.stringify([...state.visited]));
+}
+
+function submitExam() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  localStorage.removeItem(STORAGE_KEYS.IS_STARTED);
+
+  let scoreA = 0, scoreB = 0, scoreC = 0;
+  let corA = 0, corB = 0, corC = 0;
+  let wrgA = 0, wrgB = 0, wrgC = 0;
+
+  activeQuestionBank.forEach((q, idx) => {
+    const user = state.answers[idx];
+    if (user !== undefined) {
+      if (q.section === "A") {
+        if (user === q.correctAnswer) { scoreA += 2.0; corA++; }
+        else { scoreA -= 0.50; wrgA++; }
+      } else if (q.section === "B") {
+        if (user === q.correctAnswer) { scoreB += 3.0; corB++; }
+        else { scoreB -= 0.75; wrgB++; }
+      } else if (q.section === "C") {
+        const uSorted = [...user].sort().join("");
+        const cSorted = [...q.correctAnswer].sort().join("");
+        if (uSorted === cSorted) { scoreC += 4.0; corC++; }
+        else { wrgC++; }
+      }
+    }
+  });
+
+  const totalScore = Math.max(0, scoreA + scoreB + scoreC);
+  const totalAtt = (corA + wrgA) + (corB + wrgB) + (corC + wrgC);
+
+  document.getElementById("res-mock-name").innerText = `Mock Test ${state.selectedMock}`;
+  document.getElementById("res-total-score").innerText = totalScore.toFixed(2);
+  document.getElementById("res-attempted").innerText = `${totalAtt} / 60`;
+  document.getElementById("res-correct").innerText = corA + corB + corC;
+  document.getElementById("res-incorrect").innerText = wrgA + wrgB + wrgC;
+
+  document.getElementById("res-table-body").innerHTML = `
+    <tr><td>Part A</td><td>20</td><td>15</td><td>${corA+wrgA}</td><td>${corA}</td><td>${wrgA}</td><td>${scoreA.toFixed(2)}</td></tr>
+    <tr><td>Part B</td><td>40</td><td>25</td><td>${corB+wrgB}</td><td>${corB}</td><td>${wrgB}</td><td>${scoreB.toFixed(2)}</td></tr>
+    <tr><td>Part C</td><td>70</td><td>20</td><td>${corC+wrgC}</td><td>${corC}</td><td>${wrgC}</td><td>${scoreC.toFixed(2)}</td></tr>
+  `;
+
+  switchView("view-result");
+}
+
+function checkExistingSession() {
+  const started = localStorage.getItem(STORAGE_KEYS.IS_STARTED);
+  if (started === "true") {
+    state.selectedMock = parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_MOCK) || "1");
+    activeQuestionBank = generateMockQuestions(state.selectedMock);
+    state.currentQuestionIndex = parseInt(localStorage.getItem(STORAGE_KEYS.CURRENT_Q) || "0");
+    state.remainingSeconds = parseInt(localStorage.getItem(STORAGE_KEYS.TIME_LEFT) || `${EXAM_CONFIG.durationSeconds}`);
+    state.answers = JSON.parse(localStorage.getItem(STORAGE_KEYS.ANSWERS) || "{}");
+    state.marked = new Set(JSON.parse(localStorage.getItem(STORAGE_KEYS.MARKED) || "[]"));
+    state.visited = new Set(JSON.parse(localStorage.getItem(STORAGE_KEYS.VISITED) || "[]"));
+
+    switchView("view-exam");
+    initPalette();
+    renderCurrentQuestion();
+    updateStatusStrip();
+    startTimer();
+  } else {
+    initDashboard();
+  }
+}
+
+function setupEventListeners() {
+  const bind = (id, fn) => {
+    const el = document.getElementById(id);
+    if (el) el.onclick = fn;
+  };
+
+  bind("btn-back-dashboard", () => switchView("view-dashboard"));
+  bind("btn-start-exam", () => startExam());
+  bind("btn-prev", () => {
+    if (state.currentQuestionIndex > 0) {
+      state.currentQuestionIndex--;
+      renderCurrentQuestion();
+    }
+  });
+  bind("btn-next", () => {
+    if (state.currentQuestionIndex < EXAM_CONFIG.totalQuestions - 1) {
+      state.currentQuestionIndex++;
+      renderCurrentQuestion();
+    }
+  });
+  bind("btn-clear", () => {
+    delete state.answers[state.currentQuestionIndex];
+    renderCurrentQuestion();
+  });
+  bind("btn-mark-review", () => {
+    if (state.marked.has(state.currentQuestionIndex)) state.marked.delete(state.currentQuestionIndex);
+    else state.marked.add(state.currentQuestionIndex);
+    updatePaletteButton(state.currentQuestionIndex);
+  });
+  bind("btn-open-submit", () => {
+    const modal = document.getElementById("submit-modal");
+    if (modal) modal.classList.remove("hidden");
+  });
+  bind("btn-modal-cancel", () => {
+    const modal = document.getElementById("submit-modal");
+    if (modal) modal.classList.add("hidden");
+  });
+  bind("btn-modal-confirm", () => {
+    const modal = document.getElementById("submit-modal");
+    if (modal) modal.classList.add("hidden");
+    submitExam();
+  });
+  bind("btn-res-dashboard", () => {
+    localStorage.clear();
+    switchView("view-dashboard");
+    initDashboard();
+  });
+  bind("btn-res-retake", () => startExam());
+
+  document.querySelectorAll("#palette-section-tabs .tab-btn").forEach(b => {
+    b.onclick = () => filterPaletteBySection(b.getAttribute("data-sec"));
+  });
+
+  bind("btn-toggle-palette", () => {
+    const pal = document.getElementById("palette-sidebar");
+    if (pal) pal.classList.toggle("mobile-open");
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  setupEventListeners();
+  checkExistingSession();
+});
+      
