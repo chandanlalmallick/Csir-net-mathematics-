@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSIR-NET Mathematical Sciences — Full-Length Mock Tests</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- MathJax for rendering LaTeX mathematical equations -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+
+  <!-- TOP APP BAR -->
+  <header class="app-header">
+    <div class="header-brand" id="brand-title">
+      <span class="exam-badge">NTA / CSIR-NET</span>
+      <h1>MATHEMATICAL SCIENCES</h1>
+    </div>
+    <div id="header-timer-container" class="header-timer hidden">
+      <span class="timer-label">TIME REMAINING</span>
+      <span id="exam-timer" class="timer-display">03:00:00</span>
+    </div>
+  </header>
+
+  <!-- DASHBOARD VIEW -->
+  <main id="view-dashboard" class="view-container">
+    <div class="hero-section">
+      <h2>CSIR-NET MATHEMATICAL SCIENCES</h2>
+      <p class="subtitle">Full-Length Mock Test Simulator (Standard 130 Questions / 180 Minutes)</p>
+    </div>
+
+    <div class="mock-grid" id="mock-grid">
+      <!-- 5 Mock Cards injected by script.js -->
+    </div>
+  </main>
+
+  <!-- INSTRUCTIONS VIEW -->
+  <section id="view-instructions" class="view-container hidden">
+    <div class="card instruction-card">
+      <h2 id="inst-mock-title">MOCK TEST INSTRUCTIONS</h2>
+      <div class="instruction-meta">
+        <div class="meta-pill"><strong>Total Questions:</strong> 130</div>
+        <div class="meta-pill"><strong>Duration:</strong> 180 Minutes</div>
+        <div class="meta-pill"><strong>Max Attempt Allowed:</strong> 60 Questions</div>
+        <div class="meta-pill"><strong>Total Marks:</strong> 200</div>
+      </div>
+
+      <div class="section-breakdown-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Available</th>
+              <th>Max Attempt</th>
+              <th>Marking Scheme</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Part A</strong> (General Aptitude)</td>
+              <td>20 Qs (Q1 - Q20)</td>
+              <td>15 Qs</td>
+              <td>+2.0 &nbsp;|&nbsp; -0.50</td>
+              <td>Single-Choice MCQ</td>
+            </tr>
+            <tr>
+              <td><strong>Part B</strong> (Math Sciences)</td>
+              <td>40 Qs (Q21 - Q60)</td>
+              <td>25 Qs</td>
+              <td>+3.0 &nbsp;|&nbsp; -0.75</td>
+              <td>Single-Choice MCQ</td>
+            </tr>
+            <tr>
+              <td><strong>Part C</strong> (Analytical / Advanced)</td>
+              <td>70 Qs (Q61 - Q130)</td>
+              <td>20 Qs</td>
+              <td>+4.0 &nbsp;|&nbsp; 0.00</td>
+              <td>Multiple-Select MSQ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="instruction-rules">
+        <h3>Important Guidelines:</h3>
+        <ul>
+          <li><strong>Attempt Limit Enforcement:</strong> You can attempt at most 15 questions in Part A, 25 in Part B, and 20 in Part C (Maximum 60 overall). You cannot answer a new question in a full section unless you clear or change an existing attempt.</li>
+          <li><strong>Part C MSQ:</strong> Part C questions may have <em>one, two, three, or all four</em> options correct. Full credit (+4.0) is awarded only if all correct choices and zero incorrect choices are selected.</li>
+          <li><strong>Navigation & Auto-Save:</strong> Your answers, review flags, and elapsed timer are persisted in your browser via <code>localStorage</code>. Accidental reload will not lose your session.</li>
+        </ul>
+      </div>
+
+      <div class="action-row-center">
+        <button class="btn btn-secondary" id="btn-back-dashboard">Back to Dashboard</button>
+        <button class="btn btn-primary btn-large" id="btn-start-exam">START TEST</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXAM VIEW -->
+  <section id="view-exam" class="view-container hidden">
+    <!-- Live Attempt Strip -->
+    <div class="exam-status-bar">
+      <div class="status-cell">
+        <span class="cell-label">PART A</span>
+        <span class="cell-val" id="stat-part-a">0 / 15</span>
+      </div>
+      <div class="status-cell">
+        <span class="cell-label">PART B</span>
+        <span class="cell-val" id="stat-part-b">0 / 25</span>
+      </div>
+      <div class="status-cell">
+        <span class="cell-label">PART C</span>
+        <span class="cell-val" id="stat-part-c">0 / 20</span>
+      </div>
+      <div class="status-cell total-cell">
+        <span class="cell-label">TOTAL ATTEMPTED</span>
+        <span class="cell-val" id="stat-total">0 / 60</span>
+      </div>
+      <button class="btn btn-outline mobile-palette-toggle" id="btn-toggle-palette">Palette</button>
+    </div>
+
+    <div class="exam-workspace">
+      <!-- Question Panel -->
+      <div class="question-panel card">
+        <div class="question-meta-header">
+          <div>
+            <span class="badge" id="q-section-badge">PART A</span>
+            <span class="q-number-title" id="q-header-number">Question 1 / 130</span>
+          </div>
+          <div class="q-attributes">
+            <span class="attr-pill" id="q-topic-tag">Topic</span>
+            <span class="attr-pill" id="q-marks-tag">+2 / -0.5</span>
+          </div>
+        </div>
+
+        <div class="question-body" id="q-content">
+          <!-- LaTeX / Question text rendered here -->
+        </div>
+
+        <div class="options-container" id="q-options">
+          <!-- Radio or Checkbox options injected here -->
+        </div>
+
+        <div class="question-actions">
+          <div class="action-group-left">
+            <button class="btn btn-secondary" id="btn-prev">Previous</button>
+            <button class="btn btn-outline" id="btn-mark-review">Mark for Review</button>
+            <button class="btn btn-danger-outline" id="btn-clear">Clear Response</button>
+          </div>
+          <div class="action-group-right">
+            <button class="btn btn-primary" id="btn-next">Save &amp; Next</button>
+            <button class="btn btn-success" id="btn-open-submit">SUBMIT TEST</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Palette -->
+      <aside class="palette-panel card" id="palette-sidebar">
+        <div class="palette-header">
+          <h3>Question Palette</h3>
+          <div class="section-tabs" id="palette-section-tabs">
+            <button class="tab-btn active" data-sec="A">A (1-20)</button>
+            <button class="tab-btn" data-sec="B">B (21-60)</button>
+            <button class="tab-btn" data-sec="C">C (61-130)</button>
+          </div>
+        </div>
+
+        <div class="palette-legend">
+          <div class="legend-item"><span class="swatch not-visited"></span> Not Visited</div>
+          <div class="legend-item"><span class="swatch unanswered"></span> Visited / Unanswered</div>
+          <div class="legend-item"><span class="swatch answered"></span> Answered</div>
+          <div class="legend-item"><span class="swatch review"></span> Marked for Review</div>
+          <div class="legend-item"><span class="swatch answered-review"></span> Answered &amp; Review</div>
+        </div>
+
+        <div class="palette-grid" id="palette-buttons-grid">
+          <!-- 130 Palette buttons generated here -->
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- RESULT VIEW -->
+  <section id="view-result" class="view-container hidden">
+    <div class="result-container card">
+      <div class="result-header">
+        <h2>CSIR-NET MOCK TEST RESULT</h2>
+        <p class="subtitle" id="res-mock-name">Mock Test 1</p>
+      </div>
+
+      <div class="score-overview-cards">
+        <div class="res-stat-card">
+          <span class="stat-num highlight" id="res-total-score">0.00</span>
+          <span class="stat-lbl">Final Score / 200</span>
+        </div>
+        <div class="res-stat-card">
+          <span class="stat-num" id="res-attempted">0 / 60</span>
+          <span class="stat-lbl">Questions Attempted</span>
+        </div>
+        <div class="res-stat-card">
+          <span class="stat-num text-success" id="res-correct">0</span>
+          <span class="stat-lbl">Correct</span>
+        </div>
+        <div class="res-stat-card">
+          <span class="stat-num text-danger" id="res-incorrect">0</span>
+          <span class="stat-lbl">Incorrect</span>
+        </div>
+        <div class="res-stat-card">
+          <span class="stat-num" id="res-accuracy">0%</span>
+          <span class="stat-lbl">Accuracy</span>
+        </div>
+        <div class="res-stat-card">
+          <span class="stat-num" id="res-time-used">0m</span>
+          <span class="stat-lbl">Time Taken</span>
+        </div>
+      </div>
+
+      <!-- Section-wise Table -->
+      <h3 class="section-title">SECTION-WISE BREAKDOWN</h3>
+      <div class="table-responsive">
+        <table class="res-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Available</th>
+              <th>Max Limit</th>
+              <th>Attempted</th>
+              <th>Correct</th>
+              <th>Wrong</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="res-table-body">
+            <!-- Populated via script -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Topic Performance Analysis -->
+      <h3 class="section-title">TOPICAL PERFORMANCE &amp; DIAGNOSTICS</h3>
+      <div class="topic-insights-grid" id="topic-diagnostics">
+        <!-- Injected via script -->
+      </div>
+
+      <div class="action-row-center margin-top-lg">
+        <button class="btn btn-secondary" id="btn-res-dashboard">Return to Dashboard</button>
+        <button class="btn btn-outline" id="btn-res-retake">Retake Test</button>
+        <button class="btn btn-primary" id="btn-scroll-review">Review All 130 Questions</button>
+      </div>
+
+      <!-- Detailed Question Solutions Review Section -->
+      <section class="detailed-review-section" id="detailed-review-area">
+        <h3 class="section-title">COMPREHENSIVE QUESTION REVIEW &amp; DETAILED EXPLANATIONS</h3>
+        <div id="review-list-container">
+          <!-- Injected via script -->
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- MODAL: SUBMISSION CONFIRMATION -->
+  <div id="submit-modal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <h3>Confirm Test Submission</h3>
+      <p>Are you sure you want to finish and submit your exam?</p>
+      <div class="modal-summary">
+        <div><strong>Part A Attempted:</strong> <span id="mod-a">0</span> / 15</div>
+        <div><strong>Part B Attempted:</strong> <span id="mod-b">0</span> / 25</div>
+        <div><strong>Part C Attempted:</strong> <span id="mod-c">0</span> / 20</div>
+        <div class="total-row"><strong>Total Attempted:</strong> <span id="mod-tot">0</span> / 60</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-modal-cancel">Resume Exam</button>
+        <button class="btn btn-success" id="btn-modal-confirm">Confirm &amp; Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
